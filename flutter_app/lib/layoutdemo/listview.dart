@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 class ListViewDemo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -49,24 +49,34 @@ class ListViewDemo extends StatelessWidget {
         ],
       );
 
-  ListTile _tile(String title, String subTitle, IconData icon) => ListTile(
-        title: Text(
-          title,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
+  GestureDetector _tile(String title, String subTitle, IconData icon) => GestureDetector(
+    child: ListTile(
+          title: Text(
+            title,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          subtitle: Text(
+            subTitle,
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          leading: Icon(
+            icon,
+            color: Colors.green,
           ),
         ),
-        subtitle: Text(
-          subTitle,
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        leading: Icon(
-          icon,
-          color: Colors.green,
-        ),
-      );
+    onTap: (){
+      Fluttertoast.showToast(
+          msg: '$title',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIos: 1,
+          fontSize: 16.0);
+    },
+  );
 }
