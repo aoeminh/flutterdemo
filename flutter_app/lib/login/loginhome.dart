@@ -18,16 +18,18 @@ class Home extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+
         backgroundColor: Colors.blue,
         title: Text('Login'),
         leading: Icon(Icons.menu),
         actions: <Widget>[
           Icon(Icons.edit),
+          SizedBox(width: 20,),
           Icon(Icons.delete),
+          SizedBox(width: 20,),
+
         ],
-        bottom: PreferredSize(
-          child: Icon(Icons.print),
-        ),
+
       ),
     );
   }

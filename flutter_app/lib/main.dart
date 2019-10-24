@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/Animation.dart';
 import 'package:flutter_app/DemoApp.dart';
 import 'package:flutter_app/layoutdemo/container.dart';
+import 'package:flutter_app/sliver/sliver.dart';
 
+import 'bloc/bloc_demo.dart';
+import 'bloc/bloc_with_inherited_widget.dart';
+import 'bloc/test.dart';
 import 'counter.dart';
 import 'layoutdemo/card.dart';
 import 'layoutdemo/grid_view.dart';
@@ -13,7 +17,7 @@ import 'layoutdemo/stack.dart';
 import 'layoutdemo/tutorial.dart';
 import 'login/loginhome.dart';
 
-void main() => runApp(ListViewDemo());
+void main() => runApp(SliverDemo());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
