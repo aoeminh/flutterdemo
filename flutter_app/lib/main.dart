@@ -8,6 +8,8 @@ import 'bloc/bloc_demo.dart';
 import 'bloc/bloc_with_inherited_widget.dart';
 import 'bloc/test.dart';
 import 'counter.dart';
+import 'demodio/dio_demo.dart';
+import 'form/form.dart';
 import 'layoutdemo/card.dart';
 import 'layoutdemo/grid_view.dart';
 import 'layoutdemo/layout1.dart';
@@ -17,7 +19,7 @@ import 'layoutdemo/stack.dart';
 import 'layoutdemo/tutorial.dart';
 import 'login/loginhome.dart';
 
-void main() => runApp(SliverDemo());
+void main() => runApp(FormDemo());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
