@@ -2,6 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/form/home_screen.dart';
+import 'package:dio/dio.dart';
+
+final String _endpoint = "http://10.64.100.22:9119";
 
 class FormDemo extends StatefulWidget {
   @override
@@ -137,8 +140,15 @@ class _FormDemoState extends State<FormDemo> {
         print('Invalid password');
         return;
       }
+
+
       print('Login success');
 
       Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(username: _usename, password: _pass,)));
+   }
+
+   _requestLogin() async{
+    Dio dio = Dio();
+    Response response = await dio.post($)
    }
 }
