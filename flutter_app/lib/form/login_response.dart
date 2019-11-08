@@ -1,29 +1,29 @@
-class LoginResponse{
+class LoginResponse {
+  LoginResponse(
+      {this.bir,
+      this.email,
+      this.region,
+      this.job,
+      this.gender,
+      this.token,
+      this.userName});
 
-  LoginResponse({
-    this.bir,
-    this.email,
-    this.region,
-    this.job,
-    this.gender,
-    this.token,
-    this.user_name
-  });
+  factory LoginResponse.fromJson(Map<String, dynamic> json) {
+    return LoginResponse(
+        bir: json['bir'],
+        email: json['email'],
+        region: json['region'],
+        job: json['job'],
+        gender: json['gender'],
+        token: json['token'],
+        userName: json['user_name']);
+  }
 
-  final String bir;
-  final int region;
-  final int job;
-  final int gender;
-  final String user_name;
-  final String email;
-  final String token;
-
-  LoginResponse.fromJson(Map<String,dynamic> json)
-      : bir =json['bir'],
-        email =json['email'],
-        region =json['region'],
-        job =json['job'],
-        gender =json['gender'],
-        token =json['token'],
-        user_name =json['user_name'];
+  String bir;
+  int region;
+  int job;
+  int gender;
+  String userName;
+  String email;
+  String token;
 }

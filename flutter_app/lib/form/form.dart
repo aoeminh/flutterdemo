@@ -1,8 +1,13 @@
+import 'dart:convert';
+import 'dart:core' as prefix0;
+import 'dart:core';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/form/home_screen.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_app/form/login_request.dart';
+import 'package:flutter_app/form/login_response.dart';
 
 final String _endpoint = "http://10.64.100.22:9119";
 
@@ -109,7 +114,7 @@ class _FormDemoState extends State<FormDemo> {
                         contentPadding:
                             EdgeInsets.only(left: 10, top: 10, bottom: 10),
                         hintText: 'pass'),
-                    onSaved: (value){
+                    onSaved: (value) {
                       _pass = value;
                     },
                     textInputAction: TextInputAction.done,
@@ -119,7 +124,7 @@ class _FormDemoState extends State<FormDemo> {
                 RaisedButton(
                   color: Colors.amberAccent,
                   child: Text('Login'),
-                  onPressed: _login,
+                  onPressed: _requestLogin,
                 )
               ],
             ),
@@ -130,25 +135,35 @@ class _FormDemoState extends State<FormDemo> {
   }
 
   _login() {
-      key.currentState.save();
-      if(_usename != 'admin'){
-        print('Invalid username');
-        return;
-      }
+    key.currentState.save();
+    if (_usename != 'admin') {
+      print('Invalid username');
+      return;
+    }
 
-      if(_pass !=  '123456'){
-        print('Invalid password');
-        return;
-      }
+    if (_pass != '123456') {
+      print('Invalid password');
+      return;
+    }
 
+    print('Login success');
 
-      print('Login success');
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => HomePage(
+                  username: _usename,
+                  password: _pass,
+                )));
+  }
 
-      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(username: _usename, password: _pass,)));
-   }
-
-   _requestLogin() async{
+  _requestLogin() async {
+    key.currentState.save();
+    LoginRequest request = LoginRequest(username: _usename, pass: _pass);
     Dio dio = Dio();
-    Response response = await dio.post($)
-   }
+    Response response = await dio.post(_endpoint, data: request.toJson());
+    Map map = jsonDecode(response.toString());
+    LoginResponse loginResponse = LoginResponse.fromJson(map['data']);
+    print(loginResponse.email);
+  }
 }

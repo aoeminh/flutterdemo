@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Animation.dart';
 import 'package:flutter_app/DemoApp.dart';
+import 'package:flutter_app/form/home_screen.dart';
 import 'package:flutter_app/layoutdemo/container.dart';
 import 'package:flutter_app/sliver/sliver.dart';
 
@@ -19,7 +20,7 @@ import 'layoutdemo/stack.dart';
 import 'layoutdemo/tutorial.dart';
 import 'login/loginhome.dart';
 
-void main() => runApp(FormDemo());
+void main() => runApp(HomePage());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
