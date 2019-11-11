@@ -4,10 +4,12 @@ import 'dart:core';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/form/request/getListUserRequest.dart';
 import 'package:flutter_app/form/home_screen.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_app/form/login_request.dart';
-import 'package:flutter_app/form/login_response.dart';
+import 'package:flutter_app/form/request/login_request.dart';
+import 'package:flutter_app/form/response/login_response.dart';
+import 'package:flutter_app/form/share_preferent.dart';
 
 final String _endpoint = "http://10.64.100.22:9119";
 
@@ -147,16 +149,9 @@ class _FormDemoState extends State<FormDemo> {
     }
 
     print('Login success');
-
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => HomePage(
-                  username: _usename,
-                  password: _pass,
-                )));
   }
 
+  // send data to home page
   _requestLogin() async {
     key.currentState.save();
     LoginRequest request = LoginRequest(username: _usename, pass: _pass);
@@ -164,6 +159,21 @@ class _FormDemoState extends State<FormDemo> {
     Response response = await dio.post(_endpoint, data: request.toJson());
     Map map = jsonDecode(response.toString());
     LoginResponse loginResponse = LoginResponse.fromJson(map['data']);
-    print(loginResponse.email);
+    print(loginResponse);
+    Navigator.pop(context,loginResponse.userName);
+  }
+
+  // call api get user list
+
+  _getUserList() async{
+    key.currentState.save();
+    LoginRequest request = LoginRequest(username: _usename, pass: _pass);
+    Dio dio = Dio();
+    Response response = await dio.post(_endpoint, data: request.toJson());
+    Map map = jsonDecode(response.toString());
+    LoginResponse loginResponse = LoginResponse.fromJson(map['data']);
+    UserPrefs.saveToken(loginResponse.token);
+    GetListUserRequest getListUserRequest =GetListUserRequest(token: UserPrefs.getToken());
+
   }
 }
