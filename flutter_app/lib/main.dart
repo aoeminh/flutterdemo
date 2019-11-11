@@ -20,7 +20,7 @@ import 'layoutdemo/stack.dart';
 import 'layoutdemo/tutorial.dart';
 import 'login/loginhome.dart';
 
-void main() => runApp(HomePage());
+void main() => runApp(FormDemo());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
