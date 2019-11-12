@@ -1,8 +1,12 @@
-import 'dart:core' as prefix0;
+import 'dart:convert';
 import 'dart:core';
-
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/form/list_user_page.dart';
+import 'package:flutter_app/form/request/login_request.dart';
+import 'package:flutter_app/form/response/login_response.dart';
+import 'package:flutter_app/form/share_preferent.dart';
+import 'package:flutter_app/form/widget/input_form.dart';
 
 final String _endpoint = "http://10.64.100.22:9119";
 
@@ -20,7 +24,7 @@ class _FormDemoState extends State<FormDemo> {
   }
 }
 
-class Home extends StatefulWidget{
+class Home extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -28,8 +32,7 @@ class Home extends StatefulWidget{
   }
 }
 
-class _HomeState extends State<Home>{
-
+class _HomeState extends State<Home> {
   final key = GlobalKey<FormState>();
 
   String _usename;
@@ -70,6 +73,7 @@ class _HomeState extends State<Home>{
           child: Column(
             children: <Widget>[
               const SizedBox(height: 20),
+              InputForm(),
               Container(
                 decoration: BoxDecoration(
                   border: Border.all(
@@ -82,7 +86,7 @@ class _HomeState extends State<Home>{
                   decoration: InputDecoration(
                       border: InputBorder.none,
                       contentPadding:
-                      EdgeInsets.only(left: 10, top: 10, bottom: 10),
+                          EdgeInsets.only(left: 10, top: 10, bottom: 10),
                       hintText: 'username'),
                   validator: (value) {
                     if (value.length < 6) {
@@ -98,7 +102,7 @@ class _HomeState extends State<Home>{
                   },
                   textInputAction: TextInputAction.next,
                   onFieldSubmitted: (v) =>
-                  {FocusScope.of(context).requestFocus(passFoCus)},
+                      {FocusScope.of(context).requestFocus(passFoCus)},
                 ),
               ),
               const SizedBox(height: 20),
@@ -106,8 +110,7 @@ class _HomeState extends State<Home>{
                 decoration: BoxDecoration(
                     border: Border.all(
                         width: 1,
-                        color:
-                        isPassFocus ? Colors.amberAccent : Colors.grey),
+                        color: isPassFocus ? Colors.amberAccent : Colors.grey),
                     borderRadius: BorderRadius.circular(50)),
                 child: TextFormField(
                   obscureText: true,
@@ -115,7 +118,7 @@ class _HomeState extends State<Home>{
                   decoration: InputDecoration(
                       border: InputBorder.none,
                       contentPadding:
-                      EdgeInsets.only(left: 10, top: 10, bottom: 10),
+                          EdgeInsets.only(left: 10, top: 10, bottom: 10),
                       hintText: 'pass'),
                   onSaved: (value) {
                     _pass = value;
@@ -136,20 +139,20 @@ class _HomeState extends State<Home>{
     );
   }
 
-    _login1() {
-//    key.currentState.save();
-//    if (_usename != 'admin') {
-//      print('Invalid username');
-//      return;
-//    }
-//
-//    if (_pass != '123456') {
-//      print('Invalid password');
-//      return;
-//    }
+  _login1() async {
+    key.currentState.save();
 
-      print('Login success');
-      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ListUserPage()));
-
+    LoginRequest loginRequest = LoginRequest(username: _usename, pass: _pass);
+    Dio dio = Dio();
+    Response response = await dio.post(_endpoint,data:  loginRequest.toJson());
+    Map<String ,dynamic> map = jsonDecode(response.toString());
+    LoginResponse loginResponse = LoginResponse.fromJson(map['data']);
+    if(map['code'] == 0){
+      print(loginResponse.userName);
+      UserPrefs.saveToken(loginResponse.token);
+      Navigator.push(context,
+          MaterialPageRoute(builder: (BuildContext context) => ListUserPage()));
     }
+  }
+
 }
