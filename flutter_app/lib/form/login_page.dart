@@ -7,7 +7,9 @@ import 'package:flutter_app/form/list_user_page.dart';
 import 'package:flutter_app/form/request/login_request.dart';
 import 'package:flutter_app/form/response/login_response.dart';
 import 'package:flutter_app/form/share_preferent.dart';
+import 'package:flutter_app/form/sign_up_page.dart';
 import 'package:flutter_app/form/widget/input_form.dart';
+import 'package:flutter_app/generated/i18n.dart';
 
 final String _endpoint = "http://10.64.100.22:9119";
 
@@ -101,6 +103,25 @@ class _HomeState extends State<Home> {
                   color: Colors.amberAccent,
                   child: Text('Login'),
                   onPressed: _login1,
+                ),
+                const SizedBox(height: 20),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => SignUppage()));
+                  },
+                  child: RichText(
+                    text: TextSpan(
+                        text: 'Bạn chưa có tài khoản? ',
+                        style: TextStyle(color: Colors.black),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: 'Đăng ký ngay',
+                              style: TextStyle(color: Colors.amberAccent))
+                        ]),
+                  ),
                 )
               ],
             ),

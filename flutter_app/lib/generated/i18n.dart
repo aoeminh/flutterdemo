@@ -21,6 +21,10 @@ class S implements WidgetsLocalizations {
   @override
   TextDirection get textDirection => TextDirection.ltr;
 
+  String get not_have_account => "Bạn chưa có tài khoản? ";
+  String get sign_in => "Đăng nhập";
+  String get sign_up => "Đăng ký";
+  String get sign_up_now => "Đăng ký ngay";
 }
 
 class $en extends S {
