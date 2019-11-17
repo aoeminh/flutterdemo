@@ -4,6 +4,7 @@ import 'package:flutter_app/DemoApp.dart';
 import 'package:flutter_app/form/home_screen.dart';
 import 'package:flutter_app/layoutdemo/container.dart';
 import 'package:flutter_app/sliver/sliver.dart';
+import 'package:flutter_app/sqlite/dog_home.dart';
 
 import 'bloc/bloc_demo.dart';
 import 'bloc/bloc_with_inherited_widget.dart';
@@ -20,7 +21,7 @@ import 'layoutdemo/stack.dart';
 import 'layoutdemo/tutorial.dart';
 import 'login/loginhome.dart';
 
-void main() => runApp(FormDemo());
+void main() => runApp(DogHome());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

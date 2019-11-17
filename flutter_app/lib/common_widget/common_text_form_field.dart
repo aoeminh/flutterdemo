@@ -4,8 +4,8 @@ typedef OnValidator(String value);
 typedef OnChange(String value);
 typedef OnClick();
 
-class TextFieldSignUp extends StatelessWidget {
-  TextFieldSignUp(
+class CommonTextFormField extends StatelessWidget {
+  CommonTextFormField(
       {this.prefixIcon,
       this.hintText,
       this.action,

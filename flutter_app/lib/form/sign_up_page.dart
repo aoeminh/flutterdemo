@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/form/widget/text_field_signup.dart';
+import 'package:flutter_app/common_widget/common_text_form_field.dart';
 import 'package:intl/intl.dart';
 
 class SignUppage extends StatefulWidget {
@@ -57,7 +57,7 @@ class _SignUppageState extends State<SignUppage> {
         ),
       );
 
-  _buildName() => TextFieldSignUp(
+  _buildName() => CommonTextFormField(
         prefixIcon: Icon(Icons.person),
         hintText: 'Tên',
         onChange: (value) {
@@ -72,7 +72,7 @@ class _SignUppageState extends State<SignUppage> {
         },
       );
 
-  _buildDateOfBirth() => TextFieldSignUp(
+  _buildDateOfBirth() => CommonTextFormField(
         inputController: dateController,
         prefixIcon: Icon(Icons.date_range),
         hintText: 'Ngày sinh',
@@ -105,7 +105,7 @@ class _SignUppageState extends State<SignUppage> {
         },
       );
 
-  _buildEmail() => TextFieldSignUp(
+  _buildEmail() => CommonTextFormField(
         hintText: 'Email',
         prefixIcon: Icon(Icons.email),
         onChange: (value) {
@@ -120,7 +120,7 @@ class _SignUppageState extends State<SignUppage> {
     },
       );
 
-  _buildPhone() => TextFieldSignUp(
+  _buildPhone() => CommonTextFormField(
         hintText: 'Diện thoại',
         inputType: TextInputType.number,
         prefixIcon: Icon(Icons.phone),
