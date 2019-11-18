@@ -30,6 +30,11 @@ class DbQuery implements DbContract {
   }
 
   @override
+  Future<int> editDog(int id) {
+    return null;
+  }
+
+  @override
   closeDb() async {
     // TODO: implement closeDb
     final db = await DbProvider.db.database;
