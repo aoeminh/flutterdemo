@@ -3,16 +3,17 @@ import 'package:flutter_app/common_widget/common_text_form_field.dart';
 import 'package:flutter_app/sqlite/database_query.dart';
 import 'package:flutter_app/sqlite/list_dog.dart';
 
+import 'dog.dart';
+
 enum DogHomeType { ADD, EDIT }
 
 class DogHome extends StatefulWidget {
   @override
   _DogHomeState createState() => _DogHomeState();
 
-  DogHome({this.name, this.age, this.dogHomeType});
+  DogHome({this.dog, this.dogHomeType});
 
-  final name;
-  final age;
+  final Dog dog;
   final DogHomeType dogHomeType;
 }
 
@@ -27,12 +28,12 @@ class _DogHomeState extends State<DogHome> {
   void initState() {
     super.initState();
     print('${widget.dogHomeType}');
-    widget.name != null
-        ? _nameController.text = widget.name
+    widget.dog != null
+        ? _nameController.text = widget.dog.name
         : _nameController.text = '';
-    widget.age != null
-        ? _ageController.text = widget.age.toString()
-        : _nameController.text = '';
+    widget.dog != null
+        ? _ageController.text = widget.dog.age.toString()
+        : _ageController.text = '';
     _name = '';
     _age = 0;
   }
@@ -43,6 +44,7 @@ class _DogHomeState extends State<DogHome> {
     DbQuery dbQuery = DbQuery();
     dbQuery.closeDb();
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -113,15 +115,15 @@ class _DogHomeState extends State<DogHome> {
                   height: 20,
                 ),
                 //submit
-                _buildSubmitButon()
+                _buildSubmitButton()
               ],
             ),
           ),
         ),
       );
 
-  _buildSubmitButon() => InkWell(
-        onTap: _addDog,
+  _buildSubmitButton() => InkWell(
+        onTap: widget.dogHomeType == DogHomeType.EDIT ? _editDog : _addDog,
         child: Container(
           width: 200,
           height: 50,
@@ -144,8 +146,8 @@ class _DogHomeState extends State<DogHome> {
     }
   }
 
-  _editDog() async{
+  _editDog() async {
     DbQuery dbQuery = DbQuery();
-    await dbQuery.getDogById(id)
+    int result = await dbQuery.updateDog(Dog(id: widget.dog.id, name: _name,age: _age));
   }
 }

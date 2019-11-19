@@ -43,7 +43,7 @@ class _ListDogState extends State<ListDog> {
                     itemCount: listDog.length,
                     itemBuilder: (BuildContext context, int index) {
                       return _buildRowItem(
-                          index, listDog[index].name, listDog[index].age);
+                          index, listDog[index]);
                     });
               } else {
                 return Center(
@@ -55,7 +55,7 @@ class _ListDogState extends State<ListDog> {
             }),
       );
 
-  Widget _buildRowItem(int index, String name, int age) {
+  Widget _buildRowItem(int index, Dog dog) {
     return Column(
       children: <Widget>[
         SizedBox(height: 5),
@@ -72,11 +72,11 @@ class _ListDogState extends State<ListDog> {
                       alignment: Alignment.centerLeft,
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[Text('$name'), Text('$age')]))),
+                          children: <Widget>[Text('${dog.name}'), Text('${dog.age}')]))),
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    _editDog(name,age);
+                    _editDog(dog);
                   },
                   child: Icon(Icons.edit),
                 ),
@@ -88,8 +88,8 @@ class _ListDogState extends State<ListDog> {
     );
   }
 
-  _editDog(String name, int age) {
+  _editDog(Dog dog) {
     Navigator.push(context, MaterialPageRoute(
-        builder: (BuildContext context) => DogHome(name: name, age: age,dogHomeType: DogHomeType.EDIT,)));
+        builder: (BuildContext context) => DogHome(dogHomeType: DogHomeType.EDIT,dog: dog,)));
   }
 }

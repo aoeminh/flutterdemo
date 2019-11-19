@@ -30,8 +30,11 @@ class DbQuery implements DbContract {
   }
 
   @override
-  Future<int> editDog(int id) {
-    return null;
+  Future<int> updateDog(Dog dog) async {
+    final db = await DbProvider.db.database;
+    int result = await db.update(TABLE_NAME, dog.toMap(),
+        where: "id =?", whereArgs: ['${dog.id}']);
+    return result;
   }
 
   @override

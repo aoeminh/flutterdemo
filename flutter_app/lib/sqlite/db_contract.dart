@@ -7,7 +7,7 @@ abstract class DbContract {
 
   Future<List<Dog>> getDogById(int id);
 
-  Future<int> editDog(int id);
+  Future<int> updateDog(Dog dog);
 
   closeDb();
 }
