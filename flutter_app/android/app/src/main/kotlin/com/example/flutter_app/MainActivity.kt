@@ -9,5 +9,6 @@ class MainActivity: FlutterActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     GeneratedPluginRegistrant.registerWith(this)
+    AppSettingsPlugin.registerWith(this.registrarFor("com.example.flutter_app.AppSettingsPlugin"))
   }
 }

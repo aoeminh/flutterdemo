@@ -123,7 +123,10 @@ class _DogHomeState extends State<DogHome> {
       );
 
   _buildSubmitButton() => InkWell(
-        onTap: widget.dogHomeType == DogHomeType.EDIT ? _editDog : _addDog,
+//        onTap: widget.dogHomeType == DogHomeType.EDIT ? _editDog : _addDog,
+        onTap: () {
+          click();
+        },
         child: Container(
           width: 200,
           height: 50,
@@ -148,6 +151,19 @@ class _DogHomeState extends State<DogHome> {
 
   _editDog() async {
     DbQuery dbQuery = DbQuery();
-    int result = await dbQuery.updateDog(Dog(id: widget.dog.id, name: _name,age: _age));
+    int result =
+        await dbQuery.updateDog(Dog(id: widget.dog.id, name: _name, age: _age));
+  }
+
+  String _data = "";
+  int count = 0;
+
+  Future<void> click() async {
+    _data = 'Started $count at ${DateTime.now()}\n';
+    print(_data);
+    await Future.delayed(Duration(seconds: 2));
+    var _data1 = 'Started $count at ${DateTime.now()}\n';
+    count += 1;
+    print(_data1);
   }
 }
