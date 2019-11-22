@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app/common_widget/common_text_form_field.dart';
 import 'package:flutter_app/sqlite/database_query.dart';
@@ -123,10 +125,7 @@ class _DogHomeState extends State<DogHome> {
       );
 
   _buildSubmitButton() => InkWell(
-//        onTap: widget.dogHomeType == DogHomeType.EDIT ? _editDog : _addDog,
-        onTap: () {
-          click();
-        },
+        onTap: widget.dogHomeType == DogHomeType.EDIT ? _editDog : _addDog,
         child: Container(
           width: 200,
           height: 50,

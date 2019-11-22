@@ -12,6 +12,7 @@ import 'bloc/test.dart';
 import 'counter.dart';
 import 'demodio/dio_demo.dart';
 import 'form/login_page.dart';
+import 'green_app/home_green_app.dart';
 import 'layoutdemo/card.dart';
 import 'layoutdemo/grid_view.dart';
 import 'layoutdemo/layout1.dart';
@@ -21,7 +22,7 @@ import 'layoutdemo/stack.dart';
 import 'layoutdemo/tutorial.dart';
 import 'login/loginhome.dart';
 
-void main() => runApp(DogHome());
+void main() => runApp(HomeGreen());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
