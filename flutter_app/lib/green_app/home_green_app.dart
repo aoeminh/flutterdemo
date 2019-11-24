@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_app/green_app/product_overview.dart';
 import 'package:flutter_app/green_app/style_text.dart';
 
-const int mainColor = 0xff008700;
+const int mainColor = 0xff279152;
 const Color transparent = Color(0xf000000);
 
 class Main extends StatelessWidget {
