@@ -22,7 +22,7 @@ import 'layoutdemo/stack.dart';
 import 'layoutdemo/tutorial.dart';
 import 'login/loginhome.dart';
 
-void main() => runApp(HomeGreen());
+void main() => runApp(Main());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
