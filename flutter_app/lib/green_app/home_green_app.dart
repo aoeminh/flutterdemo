@@ -18,21 +18,16 @@ class Main extends StatelessWidget {
         systemNavigationBarIconBrightness: Brightness.light));
   }
 
- BuildContext context;
+  BuildContext context;
 
   @override
   Widget build(BuildContext context) {
     this.context = context;
-    return MaterialApp(
-      home: HomeGreen()
-    );
+    return MaterialApp(home: HomeGreen());
   }
-
-
 }
 
-class HomeGreen extends StatefulWidget{
-
+class HomeGreen extends StatefulWidget {
   @override
   _HomeGreenState createState() => _HomeGreenState();
 }
@@ -42,189 +37,206 @@ class _HomeGreenState extends State<HomeGreen> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+      backgroundColor: Color(mainColor),
       body: Container(
         decoration: BoxDecoration(
           color: Color(mainColor),
         ),
-        child: SingleChildScrollView(
-          child: Container(
-            decoration: BoxDecoration(color: Color(mainColor)),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+                flex: 4,
+                child: Container(
+                  padding: EdgeInsets.only(left: 30),
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius:
-                    BorderRadius.only(bottomLeft: Radius.circular(50)),
-                  ),
+                      color: Colors.white,
+                      borderRadius:
+                          BorderRadius.only(bottomLeft: Radius.circular(108))),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      SizedBox(height: 30),
                       _buildHeader(),
                       _buildBody(),
-                      SizedBox(height: 20),
                     ],
                   ),
-                ),
-                _buildPlanting()
-              ],
-            ),
-          ),
+                )),
+
+            Expanded(flex: 1, child: Container()),
+
+//                Container(
+//                  padding: EdgeInsets.symmetric(horizontal: 20),
+//                  decoration: BoxDecoration(
+//                    color: Colors.white,
+//                    borderRadius:
+//                        BorderRadius.only(bottomLeft: Radius.circular(50)),
+//                  ),
+//                  child: Column(
+//                    crossAxisAlignment: CrossAxisAlignment.start,
+//                    children: <Widget>[
+//                      SizedBox(height: 30),
+//                      _buildHeader(),
+//                      _buildBody(),
+//                      SizedBox(height: 20),
+//                    ],
+//                  ),
+//                ),
+//                _buildPlanting()
+          ],
         ),
       ),
     );
   }
 
-  _buildHeader() => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      Icon(Icons.arrow_back_ios),
-      SizedBox(
-        height: 20,
-      ),
-      Container(
-        width: 250,
-        child: Text(
-          'Fiddle Lead Fig Topiary',
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+  _buildHeader() => Container(
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              height: 20,
+            ),
+            Icon(Icons.arrow_back_ios),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              width: 250,
+              child: Text(
+                'Fiddle Lead Fig Topiary',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              '10 Nusery',
+              style: TextStyle(fontSize: 15, color: Colors.grey),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            RichText(
+              text: TextSpan(children: <TextSpan>[
+                TextSpan(
+                  text: '\$ ',
+                  style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green),
+                ),
+                TextSpan(
+                    text: '85',
+                    style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green))
+              ]),
+            ),
+          ],
         ),
-      ),
-      SizedBox(
-        height: 10,
-      ),
-      Text(
-        '10 Nusery',
-        style: TextStyle(fontSize: 15, color: Colors.grey),
-      ),
-      SizedBox(
-        height: 10,
-      ),
-      RichText(
-        text: TextSpan(children: <TextSpan>[
-          TextSpan(
-            text: '\$ ',
-            style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-                color: Colors.green),
-          ),
-          TextSpan(
-              text: '85',
-              style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.green))
-        ]),
-      ),
-    ],
-  );
+      );
 
   _buildBody() => Container(
-    padding: EdgeInsets.symmetric(horizontal: 20),
-    height: 250,
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: <Widget>[
-        InkWell(
-          onTap: (){
-            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ProductOverview()));
-          },
-          child: Container(
-            padding: EdgeInsets.all(10),
-            height: 50,
-            width: 50,
-            decoration: BoxDecoration(
-                color: Color(mainColor),
-                borderRadius: BorderRadius.circular(50)),
-            child: Icon(
-              Icons.shopping_cart,
-              color: Colors.white,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            Expanded(
+              flex: 1,
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              ProductOverview()));
+                },
+                child: FloatingActionButton(
+                  backgroundColor: Color(mainColor),
+                  child: Icon(
+                    Icons.shopping_cart,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
             ),
-          ),
+            Expanded(
+              flex: 2,
+              child: Container(
+                height: MediaQuery.of(context).size.height / 2,
+                child: Image.asset(
+                  'assets/images/green_tree.png',
+                  fit: BoxFit.fitHeight,
+                ),
+              ),
+            ),
+          ],
         ),
-        Expanded(
-          flex: 1,
-          child: Image.asset(
-            'assets/images/green_tree.png',
-            fit: BoxFit.fitHeight,
-          ),
-        )
-      ],
-    ),
-  );
+      );
 
   _buildPlanting() => Container(
-    padding: EdgeInsets.symmetric(horizontal: 20),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        SizedBox(height: 20),
-        Text(
-          'Planting',
-          style: Style.whiteTextWhiteNormal(),
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(height: 20),
+            Text(
+              'Planting',
+              style: Style.whiteTextWhiteNormal(),
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[_buildWaterPlant(), _buildTempPlant()],
+            )
+          ],
         ),
-        SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[_buildWaterPlant(), _buildTempPlant()],
-        )
-      ],
-    ),
-  );
+      );
 
   _buildWaterPlant() => Container(
-    padding: EdgeInsets.all(30),
-    decoration: BoxDecoration(
-        color: Color(0xf000000),
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-    child: Center(
-      child: Column(
-        children: <Widget>[
-          RichText(
-              text: TextSpan(children: <TextSpan>[
+        padding: EdgeInsets.all(30),
+        decoration: BoxDecoration(
+            color: Color(0xf000000),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              RichText(
+                  text: TextSpan(children: <TextSpan>[
                 TextSpan(
                     text: '250 ',
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 30,
                         fontWeight: FontWeight.bold)),
-                TextSpan(
-                    text: ' ml',
-                    style: Style.whiteTextWhiteNormal())
+                TextSpan(text: ' ml', style: Style.whiteTextWhiteNormal())
               ])),
-          Text('water',
-              style: Style.whiteTextWhiteNormal()),
-        ],
-      ),
-    ),
-  );
+              Text('water', style: Style.whiteTextWhiteNormal()),
+            ],
+          ),
+        ),
+      );
 
   _buildTempPlant() => Container(
-    padding: EdgeInsets.all(30),
-    decoration: BoxDecoration(
-        color: Color(0xf000000),
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-    child: Center(
-      child: Column(
-        children: <Widget>[
-          RichText(
-              text: TextSpan(children: <TextSpan>[
-                TextSpan(
-                    text: '18 ',
-                    style: Style.whiteTextBigBold()),
-                TextSpan(
-                    text: ' C',
-                    style: Style.whiteTextWhiteNormal())
+        padding: EdgeInsets.all(30),
+        decoration: BoxDecoration(
+            color: Color(0xf000000),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              RichText(
+                  text: TextSpan(children: <TextSpan>[
+                TextSpan(text: '18 ', style: Style.whiteTextBigBold()),
+                TextSpan(text: ' C', style: Style.whiteTextWhiteNormal())
               ])),
-          Text('sunshine',
-              style: Style.whiteTextWhiteNormal()
+              Text('sunshine', style: Style.whiteTextWhiteNormal()),
+            ],
           ),
-        ],
-      ),
-    ),
-  );
+        ),
+      );
 }

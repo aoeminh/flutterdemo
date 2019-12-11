@@ -50,7 +50,7 @@ class BlocDemo extends StatelessWidget {
               StreamBuilder(
                 initialData: Colors.red,
                 stream: colorBloc.stream,
-                builder: (contex, AsyncSnapshot snapShot) => Center(
+                builder: (context, AsyncSnapshot snapShot) => Center(
                   child: Container(
                     height: 200,
                     width: 200,

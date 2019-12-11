@@ -3,6 +3,7 @@ import 'package:flutter_app/Animation.dart';
 import 'package:flutter_app/DemoApp.dart';
 import 'package:flutter_app/form/home_screen.dart';
 import 'package:flutter_app/layoutdemo/container.dart';
+import 'package:flutter_app/preview_image/preview_photo.dart';
 import 'package:flutter_app/sliver/sliver.dart';
 import 'package:flutter_app/sqlite/dog_home.dart';
 
@@ -24,8 +25,13 @@ import 'login/loginhome.dart';
 
 void main() => runApp(Main());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
