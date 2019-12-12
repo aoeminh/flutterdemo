@@ -7,6 +7,7 @@ import 'package:flutter_app/preview_image/preview_photo.dart';
 import 'package:flutter_app/sliver/sliver.dart';
 import 'package:flutter_app/sqlite/dog_home.dart';
 
+import 'adidas/adidas.dart';
 import 'bloc/bloc_demo.dart';
 import 'bloc/bloc_with_inherited_widget.dart';
 import 'bloc/test.dart';
@@ -23,7 +24,7 @@ import 'layoutdemo/stack.dart';
 import 'layoutdemo/tutorial.dart';
 import 'login/loginhome.dart';
 
-void main() => runApp(Main());
+void main() => runApp(AdidasMain());
 
 class MyApp extends StatefulWidget {
   // This widget is the root of your application.
