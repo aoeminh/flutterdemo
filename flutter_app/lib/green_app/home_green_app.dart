@@ -61,27 +61,12 @@ class _HomeGreenState extends State<HomeGreen> {
                     ],
                   ),
                 )),
-
-            Expanded(flex: 1, child: Container()),
-
-//                Container(
-//                  padding: EdgeInsets.symmetric(horizontal: 20),
-//                  decoration: BoxDecoration(
-//                    color: Colors.white,
-//                    borderRadius:
-//                        BorderRadius.only(bottomLeft: Radius.circular(50)),
-//                  ),
-//                  child: Column(
-//                    crossAxisAlignment: CrossAxisAlignment.start,
-//                    children: <Widget>[
-//                      SizedBox(height: 30),
-//                      _buildHeader(),
-//                      _buildBody(),
-//                      SizedBox(height: 20),
-//                    ],
-//                  ),
-//                ),
-//                _buildPlanting()
+            Expanded(
+                flex: 1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[_buildPlanting()],
+                )),
           ],
         ),
       ),
@@ -98,7 +83,7 @@ class _HomeGreenState extends State<HomeGreen> {
             ),
             Icon(Icons.arrow_back_ios),
             SizedBox(
-              height: 20,
+              height: 12,
             ),
             Container(
               width: 250,
@@ -139,54 +124,55 @@ class _HomeGreenState extends State<HomeGreen> {
       );
 
   _buildBody() => Container(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.end,
+        child: Column(
           children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              ProductOverview()));
-                },
-                child: FloatingActionButton(
-                  backgroundColor: Color(mainColor),
-                  child: Icon(
-                    Icons.shopping_cart,
-                    color: Colors.white,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                ProductOverview()));
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(left: 10),
+                    child: FloatingActionButton(
+                      backgroundColor: Color(mainColor),
+                      child: Icon(
+                        Icons.shopping_cart,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Container(
-                height: MediaQuery.of(context).size.height / 2,
-                child: Image.asset(
-                  'assets/images/green_tree.png',
-                  fit: BoxFit.fitHeight,
+                Container(
+                  height: MediaQuery.of(context).size.height / 2,
+                  child: Image.asset(
+                    'assets/images/green_tree.png',
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
+              ],
             ),
           ],
         ),
       );
 
   _buildPlanting() => Container(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: EdgeInsets.symmetric(horizontal: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            SizedBox(height: 20),
+            SizedBox(height: 15),
             Text(
               'Planting',
               style: Style.whiteTextWhiteNormal(),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 15),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[_buildWaterPlant(), _buildTempPlant()],
@@ -196,13 +182,16 @@ class _HomeGreenState extends State<HomeGreen> {
       );
 
   _buildWaterPlant() => Container(
-        padding: EdgeInsets.all(30),
+        height: 90,
+        width: MediaQuery.of(context).size.width / 2 - 50,
         decoration: BoxDecoration(
             color: Color(0xf000000),
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20), topRight: Radius.circular(20))),
         child: Center(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               RichText(
                   text: TextSpan(children: <TextSpan>[
@@ -221,13 +210,16 @@ class _HomeGreenState extends State<HomeGreen> {
       );
 
   _buildTempPlant() => Container(
-        padding: EdgeInsets.all(30),
+        height: 90,
+        width: MediaQuery.of(context).size.width / 2 - 50,
         decoration: BoxDecoration(
             color: Color(0xf000000),
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20), topRight: Radius.circular(20))),
         child: Center(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               RichText(
                   text: TextSpan(children: <TextSpan>[

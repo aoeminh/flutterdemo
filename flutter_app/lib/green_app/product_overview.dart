@@ -7,6 +7,7 @@ typedef ButtonClick();
 class ProductOverview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    this.context = context;
     return Scaffold(
       body: Container(
         padding: EdgeInsets.only(left: 25),
@@ -15,67 +16,65 @@ class ProductOverview extends StatelessWidget {
       ),
     );
   }
-
-  _buildBody() => SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              height: 20,
-            ),
-            _buildTopRow(),
-            SizedBox(
-              height: 30,
-            ),
-            //title
-            Container(
-              width: 200,
-              child: Text(
-                'Product overview',
-                style: Style.whiteTextBigBold(),
-              ),
-            ),
-            //water
-            SizedBox(
-              height: 30,
-            ),
-            buildRowContent('Water', 'every 7 days'),
-            SizedBox(
-              height: 10,
-            ),
-            buildRowContent('Humidity', 'up to 82%'),
-            SizedBox(
-              height: 10,
-            ),
-            buildRowContent('Size', '38-48'),
-            SizedBox(
-              height: 30,
-            ),
-            _buildBottomButton('Delivery Infomation', () {
-              print('Delivery click');
-            }),
-            SizedBox(
-              height: 10,
-            ),
-            _buildBottomButton('Return Policy', () {
-              print('Policy click');
-            }),
-            SizedBox(
-              height: 30,
-            ),
-            buildFooter()
-          ],
+  BuildContext context;
+  _buildBody() => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[
+      SizedBox(
+        height: 30,
+      ),
+      _buildTopRow(),
+      SizedBox(
+        height: 50,
+      ),
+      //title
+      Container(
+        width: 200,
+        child: Text(
+          'Product overview',
+          style: Style.whiteTextBigBold(),
         ),
-      );
+      ),
+      //water
+      SizedBox(
+        height: 50,
+      ),
+      buildRowContent('Water', 'every 7 days'),
+      SizedBox(
+        height: 10,
+      ),
+      buildRowContent('Humidity', 'up to 82%'),
+      SizedBox(
+        height: 10,
+      ),
+      buildRowContent('Size', '38-48'),
+      SizedBox(
+        height: 50,
+      ),
+      _buildBottomButton('Delivery Infomation', () {
+        print('Delivery click');
+      }),
+      SizedBox(
+        height: 20,
+      ),
+      _buildBottomButton('Return Policy', () {
+        print('Policy click');
+      }),
+//            SizedBox(
+//              height: 60,
+//            ),
+//
+    Spacer(),
+      buildFooter()
+    ],
+  );
 
   _buildTopRow() => Container(
+
         padding: EdgeInsets.only(right: 25),
         child: Row(
           children: <Widget>[
-            Icon(
-              Icons.close,
-              color: Colors.white,
-            ),
+
             SizedBox(width: 10),
             Text(
               'greenery nyc',
@@ -115,7 +114,7 @@ class ProductOverview extends StatelessWidget {
         child: InkWell(
           onTap: buttonClick,
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: 15),
+            padding: EdgeInsets.symmetric(vertical: 20),
             decoration: BoxDecoration(
                 color: transparent,
                 borderRadius: BorderRadius.only(
@@ -165,3 +164,4 @@ class ProductOverview extends StatelessWidget {
         ],
       );
 }
+
