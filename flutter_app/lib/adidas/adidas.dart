@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -44,22 +46,22 @@ class AdidasHome extends StatefulWidget {
 class _AdidasHomeState extends State<AdidasHome> {
   bool isExpanded = false;
   int currentSizeIndex = 0;
+  int _quantityProduct = 0;
+  int currentColorIndex = 0;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return body();
   }
 
   void _expand() {
     setState(() {
-      isExpanded ? isExpanded = false : isExpanded = true;
+      isExpanded = !isExpanded;
     });
   }
 
@@ -75,23 +77,32 @@ class _AdidasHomeState extends State<AdidasHome> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SizedBox(height: 20),
+              SizedBox(height: 10),
               Container(
                   child: Image.asset(
                     'assets/images/adidas.png',
                     width: double.infinity,
-                    height: screenAwareSize(245, context),
+                    height: screenAwareSize(230, context),
                     fit: BoxFit.cover,
                   )),
               rating(),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               description(),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
-              _sizeAndQuantity()
+              _sizeAndQuantity(),
+              SizedBox(
+                height: 10,
+              ),
+              _color(),
+              SizedBox(
+                height: 10,
+              ),
+              _price()
+
             ],
           ),
         ),
@@ -153,6 +164,9 @@ class _AdidasHomeState extends State<AdidasHome> {
                   fontSize: screenAwareSize(10.0, context),
                   fontFamily: "Montserrat-SemiBold",
                 )),
+            SizedBox(
+              height: 10,
+            ),
             Padding(
               padding: EdgeInsets.only(
                   left: screenAwareSize(26.0, context),
@@ -198,8 +212,7 @@ class _AdidasHomeState extends State<AdidasHome> {
   _sizeAndQuantity() =>
       Row(
         mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          _size(),
+        children: <Widget>[_size(), _quantity(),
         ],
       );
 
@@ -213,11 +226,16 @@ class _AdidasHomeState extends State<AdidasHome> {
                 fontSize: screenAwareSize(10.0, context),
                 fontFamily: "Montserrat-SemiBold",
               )),
+          SizedBox(
+            height: 10,
+          ),
           Padding(
             padding: EdgeInsets.only(
                 left: screenAwareSize(26.0, context),
-                right: screenAwareSize(18.0, context,)
-            ),
+                right: screenAwareSize(
+                  18.0,
+                  context,
+                )),
             child: Row(
               children: sizeList.map((item) {
                 return itemSize(item, sizeList.indexOf(item));
@@ -237,7 +255,7 @@ class _AdidasHomeState extends State<AdidasHome> {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(5)),
-            color: currentSizeIndex == index ? Colors.red : Colors.grey,
+            color: currentSizeIndex == index ? Colors.red : Color(0xFF525663),
           ),
           margin: EdgeInsets.all(5),
           height: screenAwareSize(30, context),
@@ -248,16 +266,217 @@ class _AdidasHomeState extends State<AdidasHome> {
 
   _quantity() =>
       Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text('Product Description',
+          Text('Quantity',
               style: TextStyle(
                 color: Color(0xFF949598),
                 fontSize: screenAwareSize(10.0, context),
                 fontFamily: "Montserrat-SemiBold",
               )),
-          Row(
+          SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+                left: screenAwareSize(26.0, context),
+                right: screenAwareSize(
+                  18.0,
+                  context,
+                )),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                InkWell(
+                  onTap: _decrease,
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 1),
+                    height: screenAwareSize(30, context),
+                    width: screenAwareSize(30, context),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      color: Color(0xFF525663),
+                    ),
+                    child: Center(
+                      child: Text('-',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: screenAwareSize(20.0, context),
+                            fontFamily: "Montserrat-SemiBold",
+                          )),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 1),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    color: Color(0xFF525663),
+                  ),
+                  height: screenAwareSize(30, context),
+                  width: screenAwareSize(30, context),
+                  child: Center(
+                    child: Text(_quantityProduct.toString(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: screenAwareSize(15.0, context),
+                          fontFamily: "Montserrat-SemiBold",
+                        )),
+                  ),
+                ),
+                InkWell(
+                  onTap: _increase,
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 1),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      color: Color(0xFF525663),
+                    ),
+                    height: screenAwareSize(30, context),
+                    width: screenAwareSize(30, context),
+                    child: Center(
+                      child: Text('+',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: screenAwareSize(20.0, context),
+                            fontFamily: "Montserrat-SemiBold",
+                          )),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
+      );
+
+  _increase() {
+    print('_increase $_quantityProduct');
+    setState(() {
+      print('_increase $_quantityProduct');
+      if (_quantityProduct < 10) {
+        _quantityProduct++;
+      } else {
+        _quantityProduct = 10;
+      }
+    });
+  }
+
+  _decrease() {
+    print('_decrease $_quantityProduct');
+    setState(() {
+      if (_quantityProduct > 0) {
+        _quantityProduct--;
+      } else {
+        _quantityProduct = 0;
+      }
+    });
+  }
+
+  Widget _color() =>
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Select Color',
+            style: TextStyle(
+              color: Color(0xFF949598),
+              fontSize: screenAwareSize(10.0, context),
+              fontFamily: "Montserrat-SemiBold",
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+                left: screenAwareSize(26.0, context),
+                right: screenAwareSize(
+                  18.0,
+                  context,
+                )),
+            child: Row(children: colors.map((item) {
+              return _itemColor(
+                  item, currentColorIndex == colors.indexOf(item), () {
+                setState(() {
+                  currentColorIndex = colors.indexOf(item);
+                });
+              });
+            }).toList()),
+          ),
+        ],
+      );
+
+  Widget _itemColor(Color color, bool isSelected, VoidCallback onTap) =>
+      InkWell(
+        onTap: onTap,
+        child: Container(
+          width: screenAwareSize(30, context),
+          height: screenAwareSize(30, context),
+          margin: EdgeInsets.all(5),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5)), color: color),
+          child: Offstage(
+              offstage: !isSelected,
+              child: Center(child: Icon(Icons.check, color: Colors.black,),)),
+        ),
+      );
+
+  _price() =>
+      Stack(
+        children: <Widget>[
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[],
+            children: <Widget>[
+              Text('Price',
+                  style: TextStyle(
+                    color: Color(0xFF949598),
+                    fontSize: screenAwareSize(10.0, context),
+                    fontFamily: "Montserrat-SemiBold",
+                  )
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    left: screenAwareSize(26.0, context),
+                    right: screenAwareSize(
+                      18.0,
+                      context,
+                    )),
+                child: Text('\$80',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: screenAwareSize(30.0, context),
+                      fontFamily: "Montserrat-SemiBold",
+                    )
+                ),
+              ),
+              SizedBox(height: 10,),
+              Container(
+
+                height: screenAwareSize(35, context),
+                padding: EdgeInsets.only(left: 35),
+                decoration: BoxDecoration(
+                  color: Color(0xFFFB382F),
+                  borderRadius: BorderRadius.all(Radius.circular(5))
+                ),
+                child: Center(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('Add To Cart',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: screenAwareSize(15.0, context),
+                          fontFamily: "Montserrat-SemiBold",
+                          fontWeight: FontWeight.bold
+                        )),
+                  )
+                ),
+              )
+            ],
+          ),
+          Positioned(
+            right: -40.0,
+            bottom: -70.0,
+            height: screenAwareSize(150, context),
+            width: screenAwareSize(190, context),
+            child: Image.asset('assets/images/cart.png'),
           )
         ],
       );
