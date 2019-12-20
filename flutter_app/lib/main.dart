@@ -1,30 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/Animation.dart';
-import 'package:flutter_app/DemoApp.dart';
-import 'package:flutter_app/form/home_screen.dart';
-import 'package:flutter_app/layoutdemo/container.dart';
-import 'package:flutter_app/preview_image/preview_photo.dart';
-import 'package:flutter_app/sliver/sliver.dart';
-import 'package:flutter_app/sqlite/dog_home.dart';
 
-import 'adidas/adidas.dart';
-import 'bloc/bloc_demo.dart';
-import 'bloc/bloc_with_inherited_widget.dart';
-import 'bloc/test.dart';
-import 'counter.dart';
-import 'demodio/dio_demo.dart';
-import 'form/login_page.dart';
-import 'green_app/home_green_app.dart';
-import 'layoutdemo/card.dart';
-import 'layoutdemo/grid_view.dart';
-import 'layoutdemo/layout1.dart';
-import 'layoutdemo/listview.dart';
-import 'layoutdemo/row_column.dart';
-import 'layoutdemo/stack.dart';
-import 'layoutdemo/tutorial.dart';
-import 'login/loginhome.dart';
+import 'clock/clock.dart';
 
-void main() => runApp(AdidasMain());
+void main() => runApp(Clock());
 
 class MyApp extends StatefulWidget {
   // This widget is the root of your application.
