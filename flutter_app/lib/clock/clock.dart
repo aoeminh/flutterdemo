@@ -33,6 +33,7 @@ class _ClockHomeState extends State<ClockHome>
       setState(() {});
     });
     animationController.forward();
+
   }
 
   @override
@@ -75,7 +76,6 @@ class _ClockHomeState extends State<ClockHome>
       );
 
   _clock() => Container(
-
         width: 320,
         height: 320,
         decoration: BoxDecoration(

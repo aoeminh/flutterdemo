@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'animation/easing_animation.dart';
+import 'animation/parenting_animation_widget_home.dart';
 import 'clock/clock.dart';
 
-void main() => runApp(Clock());
+void main() => runApp(ParentingAnimationWidgetHome());
 
 class MyApp extends StatefulWidget {
   // This widget is the root of your application.
