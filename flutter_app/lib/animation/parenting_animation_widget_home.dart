@@ -26,9 +26,9 @@ class _ParentingAnimationWidgetState extends State<ParentingAnimationWidget>
     super.initState();
     controller =
         AnimationController(vsync: this, duration: Duration(seconds: 2));
-    _growAnimation = Tween(begin: 10, end: 100)
+    _growAnimation = Tween(begin: 50.0, end: 100.0)
         .animate(CurvedAnimation(parent: controller, curve: Curves.easeIn));
-    _animation = Tween(begin: -0.25, end: 0.0)
+    _animation = Tween(begin: 1.0, end: 0.0)
         .animate(CurvedAnimation(parent: controller, curve: Curves.easeIn))
           ..addStatusListener((status) {
             if (status == AnimationStatus.completed) {
@@ -56,7 +56,7 @@ class _ParentingAnimationWidgetState extends State<ParentingAnimationWidget>
             children: <Widget>[
               Transform(
                   transform: Matrix4.translationValues(
-                      _animation.value * width, 0.0, 0.0),
+                       0.0,0.0, 0.0),
                   child: Center(
                       child: AnimatedBuilder(
                         animation: _growAnimation,
@@ -71,9 +71,10 @@ class _ParentingAnimationWidgetState extends State<ParentingAnimationWidget>
                       ))),
               Transform(
                 transform: Matrix4.translationValues(
-                    _animation.value * width, 0.0, 0.0),
+                    -100.0,100.0, 0.0),
                 child: Center(
                   child: Container(
+                    padding: EdgeInsets.all(10),
                     width: 200,
                     height: 200,
                     color: Colors.orange,

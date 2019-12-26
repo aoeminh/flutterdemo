@@ -35,7 +35,7 @@ dev_dependencies:
   sqflite: any
   path: any
   path_provider: any
-
+  rxdart: ^0.22.6
   flutter_test:
     sdk: flutter
 
