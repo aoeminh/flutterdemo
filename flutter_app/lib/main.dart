@@ -4,7 +4,7 @@ import 'package:flutter_app/rxdart/rxdart.dart';
 import 'animation/easing_animation.dart';
 import 'animation/parenting_animation_widget_home.dart';
 import 'clock/clock.dart';
-import 'local_event_app/local_app_home.dart';
+import 'local_event_app/home/local_app_home.dart';
 
 void main() => runApp(LocalMain());
 

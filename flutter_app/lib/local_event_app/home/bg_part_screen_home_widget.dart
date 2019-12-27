@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'dart:math';
+import 'dart:math' as math;
 class BackgroundPartHomePage extends StatefulWidget {
   BackgroundPartHomePage({@required this.height, this.width});
 
@@ -21,10 +21,11 @@ class _BackgroundPartHomePageState extends State<BackgroundPartHomePage>
   void initState() {
     super.initState();
     controller = AnimationController(
-        value: 0.0, vsync: this, duration: Duration(seconds: 2),
+        value: 0.0, vsync: this, duration: Duration(seconds: 5),
     upperBound: 1,
-    lowerBound: -1)
-      ..repeat();
+    lowerBound: -1
+    )
+     ..repeat() ;
   }
 
   @override
@@ -48,12 +49,13 @@ class _BackgroundPartHomePageState extends State<BackgroundPartHomePage>
 class BottomShapeClipper extends CustomClipper<Path> {
   BottomShapeClipper(this.valueY);
 
-  var  valueY = 9.0;
+  var  valueY = 0.0;
   var slice = math.pi;
 
   @override
   Path getClip(Size size) {
-    double xCenter = size.width *0.5 * math.sin;
+    double xCenter = size.width *0.5 +(size.width *0.6 + 1 )  * math.sin(valueY * slice);
+    double yCenter = size.height *0.8 +150  * math.cos(valueY * slice);
     Path path = Path();
     Offset startPoint = Offset(0, size.height * 0.7);
     Offset endPoint = Offset(size.width, size.height * 0.7);
@@ -61,7 +63,7 @@ class BottomShapeClipper extends CustomClipper<Path> {
 
     path.lineTo(startPoint.dx, startPoint.dy);
     path.quadraticBezierTo(
-        controlPoint.dx, valueY, size.width, size.height * 0.7);
+        xCenter,yCenter, size.width, size.height * 0.7);
     path.lineTo(size.width, 0);
     return path;
   }
