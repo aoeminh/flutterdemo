@@ -135,7 +135,7 @@ class _HomePageState extends State<HomePage> {
      return InkWell(
        onTap: (){},
        child: EventWidget(
-         imagePath: ,
+//         imagePath: ,
 
        ),
      );
