@@ -1,9 +1,28 @@
 class Message {
   Message({this.content, this.id, this.isOwner, this.time, this.userName});
 
-  String content;
   String id;
-  bool isOwner;
-  String time;
   String userName;
+  String content;
+  bool isOwner;
+  int time = DateTime.now().millisecondsSinceEpoch;
+
+  Map<String, dynamic> toJson() =>
+      {
+        'id': id,
+        'userName': userName,
+        'content': content,
+        'isOwner': isOwner,
+        'time': time
+      };
+
+  factory Message.fromJson(Map<String, dynamic> json) =>
+      Message(
+          id: json['id'],
+          userName: json['userName'],
+          content: json['content'],
+          isOwner: json['isOwner'],
+          time: json['time']
+
+      );
 }

@@ -5,6 +5,7 @@ class Chat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: ChatHome(),
     );
   }
@@ -22,6 +23,7 @@ class _ChatHomeState extends State<ChatHome> {
   Widget build(BuildContext context) {
     print('$isShow');
     return Scaffold(
+
       appBar: AppBar(
         leading: InkWell(
             onTap: (){
@@ -31,29 +33,31 @@ class _ChatHomeState extends State<ChatHome> {
             },
             child: Icon(Icons.message)),
       ),
-      body: Stack(children :<Widget>[
-        Container(
+      body: SafeArea(
+        child: Stack(children :<Widget>[
+          Container(
 //          height: 2000,
-          color: Colors.green,
-        ),
-        Positioned(
-          bottom: 10,
-          right: 10,
-          child: InkWell(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage()));
-            },
-            child: Offstage(
-              offstage: !isShow,
-                child: Container(
-                  height: 300,
-                  width: 200,
-                  color: Colors.orange,
-                ),
-            ),
+            color: Colors.green,
           ),
-        )
-      ]),
+          Positioned(
+            bottom: 10,
+            right: 10,
+            child: InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage()));
+              },
+              child: Offstage(
+                offstage: !isShow,
+                  child: Container(
+                    height: 300,
+                    width: 200,
+                    color: Colors.orange,
+                  ),
+              ),
+            ),
+          )
+        ]),
+      ),
 
     );
   }
