@@ -12,7 +12,7 @@ class MessagePreferences {
   static Future<List<Message>> getListMessage() async {
     final prefs = await SharedPreferences.getInstance();
     return List<Message>.from(
-        (jsonDecode(prefs.getString('list'))).map((m) => Message.fromJson(m)));
+        (jsonDecode(prefs.getString('list')) as List).map((m) => Message.fromJson(m)));
   }
 
   static removeListMessage() async {

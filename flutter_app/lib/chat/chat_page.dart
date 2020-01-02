@@ -3,7 +3,11 @@ import 'package:flutter_app/chat/friend_message_widget.dart';
 import 'package:flutter_app/chat/message.dart';
 import 'package:flutter_app/chat/owner_message_widget.dart';
 import 'package:flutter_app/chat/share_preferent.dart';
-import 'package:intl/intl.dart';
+
+const int saveSize = 50;
+const double _paddingHorizontalTextField = 10;
+const double _heightInput = 50;
+const double _sendIconSize = 30;
 
 class ChatPage extends StatefulWidget {
   @override
@@ -12,7 +16,6 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   List<Message> messageList = List<Message>();
-
   TextEditingController _controller;
   ScrollController _scrollController;
   FocusNode focusNode = FocusNode();
@@ -26,21 +29,28 @@ class _ChatPageState extends State<ChatPage> {
     });
     _scrollController = ScrollController();
     _controller = TextEditingController();
-
+    getList();
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     // TODO: implement dispose
     super.dispose();
     _controller.dispose();
     _scrollController.dispose();
+    // save list message to local
+    if (messageList.isNotEmpty) {
+      if (messageList.length <= saveSize) {
+        await MessagePreferences.saveListMessage(messageList);
+      } else {
+        await MessagePreferences.saveListMessage(
+            messageList.sublist(messageList.length - saveSize));
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    getList();
-    print('build');
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -51,26 +61,31 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   _listMessage() => Expanded(
-        child: ListView.builder(
-            controller: _scrollController,
-            itemCount: messageList.length,
-            itemBuilder: (context, index) {
-              if (messageList[index].isOwner) {
-                return OwnerMessage(messageList[index]);
-              } else {
-                return FriendMessage(messageList[index]);
-              }
-            }),
+        child: messageList.length == 0
+            ? _emptyMessage()
+            : ListView.builder(
+                controller: _scrollController,
+                itemCount: messageList.length,
+                itemBuilder: (context, index) {
+                  if (messageList[index].isOwner) {
+                    return OwnerMessage(messageList[index]);
+                  } else {
+                    return FriendMessage(messageList[index]);
+                  }
+                }),
       );
 
+  _emptyMessage() => Container();
+
   _inputMessage() => Container(
-        height: 50,
+        height: _heightInput,
         color: Color(0xFFD6D6D6),
         child: Row(
           children: <Widget>[
             Expanded(
                 child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: _paddingHorizontalTextField),
                     child: TextField(
                       controller: _controller,
                       focusNode: focusNode,
@@ -80,7 +95,7 @@ class _ChatPageState extends State<ChatPage> {
               child: Icon(
                 Icons.send,
                 color: Colors.lightBlue,
-                size: 30,
+                size: _sendIconSize,
               ),
             ),
             SizedBox(
@@ -98,106 +113,32 @@ class _ChatPageState extends State<ChatPage> {
           time: DateTime.now().millisecondsSinceEpoch,
           isOwner: true,
           content: content,
-          id: '1');
+          id: '2');
       addItem(message);
-
-      Future.delayed(Duration(milliseconds: 200), () {
-        _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-            duration: Duration(milliseconds: 500), curve: Curves.easeIn);
-      });
+      _scrollToEnd();
       _controller.clear();
     }
   }
 
-  addItem(Message message) async {
+  addItem(Message message) {
     messageList.add(message);
     setState(() {});
-    MessagePreferences.saveListMessage(messageList);
   }
 
-  getList()async{
-    final list =await MessagePreferences.getListMessage();
-    messageList.addAll(list);
-    print('${messageList[0].userName}');
-
+  getList() {
+    MessagePreferences.getListMessage().then((list) {
+      if (list != null && list.isNotEmpty) {
+        messageList.addAll(list);
+        _scrollToEnd();
+      }
+      setState(() {});
+    });
   }
 
-  static List<Message> dummyData() => [
-        Message(
-            id: '1',
-            content: 'Hello',
-            isOwner: true,
-            time:  DateTime.now().millisecondsSinceEpoch,
-            userName: 'Minh'),
-        Message(
-            id: '1',
-            content: 'Hi',
-            isOwner: false,
-            time:  DateTime.now().millisecondsSinceEpoch,
-            userName: 'Dung'),
-        Message(
-            id: '1',
-            content:
-                'How are you How are you ',
-            isOwner: true,
-            time:  DateTime.now().millisecondsSinceEpoch,
-            userName: 'Minh'),
-        Message(
-            id: '1',
-            content:
-                'I\'m fine I\'m fine ',
-            isOwner: false,
-            time:  DateTime.now().millisecondsSinceEpoch,
-            userName: 'Dung'),
-        Message(
-            id: '1',
-            content: 'Good',
-            isOwner: true,
-            time:  DateTime.now().millisecondsSinceEpoch,
-            userName: 'Minh'),
-        Message(
-            id: '1',
-            content: 'Hello',
-            isOwner: true,
-            time:  DateTime.now().millisecondsSinceEpoch,
-            userName: 'Minh'),
-        Message(
-            id: '1',
-            content: 'Hi',
-            isOwner: false,
-            time:  DateTime.now().millisecondsSinceEpoch,
-            userName: 'Dung'),
-        Message(
-            id: '1',
-            content:
-                'How are you How are you ',
-            isOwner: true,
-            time:  DateTime.now().millisecondsSinceEpoch,
-            userName: 'Minh'),
-        Message(
-            id: '1',
-            content:
-                'I\'m fine I\'m fine I\'m fine  ',
-            isOwner: false,
-            time:  DateTime.now().millisecondsSinceEpoch,
-            userName: 'Dung'),
-        Message(
-            id: '1',
-            content: 'Good',
-            isOwner: true,
-            time:  DateTime.now().millisecondsSinceEpoch,
-            userName: 'Minh'),
-        Message(
-            id: '1',
-            content: 'Hello',
-            isOwner: true,
-            time:  DateTime.now().millisecondsSinceEpoch,
-            userName: 'Minh'),
-        Message(
-            id: '1',
-            content: 'Hi',
-            isOwner: false,
-            time:  DateTime.now().millisecondsSinceEpoch,
-            userName: 'Dung'),
-      ];
+  _scrollToEnd() {
+    Future.delayed(Duration(milliseconds: 200), () {
+      _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 500), curve: Curves.easeIn);
+    });
+  }
 }

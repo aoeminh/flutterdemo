@@ -21,20 +21,18 @@ class _ChatHomeState extends State<ChatHome> {
 
   @override
   Widget build(BuildContext context) {
-    print('$isShow');
     return Scaffold(
-
       appBar: AppBar(
         leading: InkWell(
-            onTap: (){
+            onTap: () {
               setState(() {
-                isShow= !isShow;
+                isShow = !isShow;
               });
             },
             child: Icon(Icons.message)),
       ),
       body: SafeArea(
-        child: Stack(children :<Widget>[
+        child: Stack(children: <Widget>[
           Container(
 //          height: 2000,
             color: Colors.green,
@@ -43,22 +41,22 @@ class _ChatHomeState extends State<ChatHome> {
             bottom: 10,
             right: 10,
             child: InkWell(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage()));
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ChatPage()));
               },
               child: Offstage(
                 offstage: !isShow,
-                  child: Container(
-                    height: 300,
-                    width: 200,
-                    color: Colors.orange,
-                  ),
+                child: Container(
+                  height: 300,
+                  width: 200,
+                  color: Colors.orange,
+                ),
               ),
             ),
           )
         ]),
       ),
-
     );
   }
 }

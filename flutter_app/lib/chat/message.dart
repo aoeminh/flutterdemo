@@ -5,7 +5,7 @@ class Message {
   String userName;
   String content;
   bool isOwner;
-  int time = DateTime.now().millisecondsSinceEpoch;
+  int time ;
 
   Map<String, dynamic> toJson() =>
       {
