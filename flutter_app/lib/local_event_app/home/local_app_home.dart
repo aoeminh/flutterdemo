@@ -73,7 +73,8 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           _marginLarge(),
-          _listCategory()
+          _listCategory(),
+          _listEvent()
         ],
       );
 
@@ -104,13 +105,17 @@ class _HomePageState extends State<HomePage> {
             return InkWell(
               onTap: () {
                 setState(() {
-                  currentEvents =  events.where((event) => event.categoryType.contains(currentCategoryType)).toList();
                   currentCategoryType = category.categoryType;
+
+                  currentEvents = events
+                      .where((event) =>
+                          event.categoryType.contains(currentCategoryType))
+                      .toList();
+                  print('$currentCategoryType}');
                 });
               },
               child: CategoryWidget(
-                isSelected:
-                currentCategoryType == category.categoryType,
+                isSelected: currentCategoryType == category.categoryType,
                 icon: category.icon,
                 title: category.title,
               ),
@@ -123,23 +128,19 @@ class _HomePageState extends State<HomePage> {
         height: 20,
       );
 
-  _listEvent() => ListView.builder(itemBuilder: (context, index){
-
-//    var newEventList = List();
-//    for(int i = 0; i< events.length; i++){
-//      if(events[i].categoryType.contains(currentCategoryType)){
-//        newEventList.add(events[i]);
-//      }
-//    }
-    List<Event> newEvent = events.where((event) => event.categoryType.contains(currentCategoryType)).toList();
-     return InkWell(
-       onTap: (){},
-       child: EventWidget(
-//         imagePath: ,
-
-       ),
-     );
-
-
-  });
+  _listEvent() => ListView.builder(
+    primary: false,
+    shrinkWrap: true,
+      itemCount: currentEvents.length,
+      itemBuilder: (context, index) {
+        return InkWell(
+          onTap: () {},
+          child: EventWidget(
+            imagePath: currentEvents[index].imagePath,
+            title: currentEvents[index].title,
+            location: currentEvents[index].location,
+            time: currentEvents[index].duration,
+          ),
+        );
+      });
 }

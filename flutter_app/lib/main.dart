@@ -7,7 +7,7 @@ import 'chat/chat.dart';
 import 'clock/clock.dart';
 import 'local_event_app/home/local_app_home.dart';
 
-void main() => runApp(Chat());
+void main() => runApp(LocalMain());
 
 class MyApp extends StatefulWidget {
   // This widget is the root of your application.
