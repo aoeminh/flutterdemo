@@ -7,7 +7,8 @@ import 'package:flutter_app/chat/share_preferent.dart';
 const int saveSize = 50;
 const double _paddingHorizontalTextField = 10;
 const double _heightInput = 50;
-const double _sendIconSize = 30;
+const double _heightToolbar = 50;
+const double _iconSize = 30;
 
 class ChatPage extends StatefulWidget {
   @override
@@ -54,11 +55,32 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
       body: SafeArea(
         child: Column(
-          children: <Widget>[_listMessage(), _inputMessage()],
+          children: <Widget>[_toolbar(), _listMessage(), _inputMessage()],
         ),
       ),
     );
   }
+
+  _toolbar() => Container(
+        width: double.infinity,
+        height: _heightToolbar,
+        child: Stack(
+          children: <Widget>[
+            Align(alignment: Alignment.center, child: Text('Chat Screen')),
+            Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Icon(
+                      Icons.clear,
+                      size: _iconSize,
+                      color: Colors.grey,
+                    )))
+          ],
+        ),
+      );
 
   _listMessage() => Expanded(
         child: messageList.length == 0
@@ -95,7 +117,7 @@ class _ChatPageState extends State<ChatPage> {
               child: Icon(
                 Icons.send,
                 color: Colors.lightBlue,
-                size: _sendIconSize,
+                size: _iconSize,
               ),
             ),
             SizedBox(
