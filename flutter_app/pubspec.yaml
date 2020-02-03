@@ -37,6 +37,7 @@ dev_dependencies:
   path_provider: any
   rxdart: ^0.22.6
   web_socket_channel: ^1.0.14
+  font_awesome_flutter: ^8.5.0
   flutter_test:
     sdk: flutter
 
@@ -112,4 +113,16 @@ flutter:
     - assets/images/guest5.jpg
     - assets/images/guest6.jpg
     - assets/images/music_concert.jpeg
+    - assets/images/gondola.jpg
+    - assets/images/hotel0.jpg
+    - assets/images/hotel1.jpg
+    - assets/images/hotel2.jpg
+    - assets/images/murano.jpg
+    - assets/images/newdelhi.jpg
+    - assets/images/newyork.jpg
+    - assets/images/paris.jpg
+    - assets/images/santorini.jpg
+    - assets/images/saopaulo.jpg
+    - assets/images/stmarksbasilica.jpg
+    - assets/images/venice.jpg
 
