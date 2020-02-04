@@ -55,11 +55,16 @@ class _TravelHomeState extends State<TravelHome> {
           SizedBox(
             height: 30,
           ),
-          _topDestinationTitle(),
+          _topTitle('Top Destinations'),
           SizedBox(
             height: 30,
           ),
-          _listDestination()
+          _listDestination(),
+          SizedBox(
+            height: 30,
+          ),
+          _topTitle('Top Hotels'),
+
         ],
       );
 
@@ -91,11 +96,11 @@ class _TravelHomeState extends State<TravelHome> {
     );
   }
 
-  _topDestinationTitle() => Row(
+  _topTitle(String title) => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
-            'Top Destinations',
+            title,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
           Text(
