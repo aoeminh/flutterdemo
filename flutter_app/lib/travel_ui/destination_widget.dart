@@ -24,7 +24,7 @@ class _DestinationWidgetState extends State<DestinationWidget> {
             bottom: 0,
             child: Container(
               height: 100,
-              padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+              padding: EdgeInsets.only(top: 40, left: 10, right: 10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                     bottomRight: Radius.circular(10),
@@ -62,16 +62,19 @@ class _DestinationWidgetState extends State<DestinationWidget> {
               padding: EdgeInsets.all(10),
               child: Stack(
                 children: <Widget>[
-                  ClipRRect(
-                    child: Container(
-                      height: 200,
-                      width: 200,
-                      child: Image.asset(
-                        widget.destination.imageUrl,
-                        fit: BoxFit.cover,
+                  Hero(
+                    tag: widget.destination.imageUrl,
+                    child: ClipRRect(
+                      child: Container(
+                        height: 200,
+                        width: 200,
+                        child: Image.asset(
+                          widget.destination.imageUrl,
+                          fit: BoxFit.cover,
+                        ),
                       ),
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
                   Positioned(
                     bottom: 10,

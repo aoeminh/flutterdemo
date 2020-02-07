@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/travel_ui/destination.dart';
+import 'package:flutter_app/travel_ui/destination_detail.dart';
 import 'package:flutter_app/travel_ui/destination_widget.dart';
+import 'package:flutter_app/travel_ui/hotel.dart';
+import 'package:flutter_app/travel_ui/hotel_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class TravelMain extends StatelessWidget {
@@ -30,10 +33,14 @@ class _TravelHomeState extends State<TravelHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Color(0xFFEEEEEE),
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: _buildBody(),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            color: Color(0xFFEEEEEE),
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: _buildBody(),
+          ),
+        ),
       ),
     );
   }
@@ -64,7 +71,13 @@ class _TravelHomeState extends State<TravelHome> {
             height: 30,
           ),
           _topTitle('Top Hotels'),
-
+          SizedBox(
+            height: 30,
+          ),
+          _listHotels(),
+          SizedBox(
+            height: 30,
+          ),
         ],
       );
 
@@ -112,14 +125,34 @@ class _TravelHomeState extends State<TravelHome> {
       );
 
   _listDestination() => Container(
-    height: 300,
-    child: ListView.builder(
-        shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
+        height: 300,
+        child: ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemCount: destinations.length,
+            itemBuilder: (BuildContext context, int index) => InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DestinationDetail(
+                                  destination: destinations[index],
+                                )));
+                  },
+                  child: DestinationWidget(
+                    destination: destinations[index],
+                  ),
+                )),
+      );
 
-        itemCount: destinations.length,
-        itemBuilder: (BuildContext context, int index) => DestinationWidget(
-              destination: destinations[index],
-            )),
-  );
+  _listHotels() => Container(
+        height: 400,
+        child: ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemCount: hotels.length,
+            itemBuilder: (BuildContext context, index) => HotelWidget(
+                  hotels: hotels[index],
+                )),
+      );
 }
