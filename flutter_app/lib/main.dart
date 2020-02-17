@@ -4,11 +4,12 @@ import 'package:flutter_app/travel_ui/travel_main.dart';
 
 import 'animation/easing_animation.dart';
 import 'animation/parenting_animation_widget_home.dart';
+import 'bike/bike_home.dart';
 import 'chat/chat.dart';
 import 'clock/clock.dart';
 import 'local_event_app/home/local_app_home.dart';
 
-void main() => runApp(TravelMain());
+void main() => runApp(BikeMain());
 
 class MyApp extends StatefulWidget {
   // This widget is the root of your application.

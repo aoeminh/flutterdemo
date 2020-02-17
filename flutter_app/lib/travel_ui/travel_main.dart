@@ -36,7 +36,7 @@ class _TravelHomeState extends State<TravelHome> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            color: Color(0xFFEEEEEE),
+              color: Color(0xFFEEEEEE),
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: _buildBody(),
           ),
