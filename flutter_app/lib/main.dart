@@ -8,8 +8,9 @@ import 'bike/bike_home.dart';
 import 'chat/chat.dart';
 import 'clock/clock.dart';
 import 'local_event_app/home/local_app_home.dart';
+import 'netflix/netflix_main.dart';
 
-void main() => runApp(BikeMain());
+void main() => runApp(NetflixMain());
 
 class MyApp extends StatefulWidget {
   // This widget is the root of your application.
