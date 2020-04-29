@@ -5,35 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4512816e-77a2-44bf-a043-cc90ba4165e4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/flutter_app/assets/images/cobra_kai.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/assets/images/daredevil.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/assets/images/endgame.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/assets/images/erased.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/assets/images/netflix_logo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/assets/images/nutcracker.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/assets/images/nutcracker_0.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/assets/images/nutcracker_1.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/assets/images/nutcracker_2.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/assets/images/oitnb.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/assets/images/plastic_memories.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/assets/images/seven_deadly_sins.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/assets/images/shigatsu_wa_kimi_no_uso.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/assets/images/spiderman.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/assets/images/spiderman_0.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/assets/images/spiderman_1.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/assets/images/spiderman_2.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/assets/images/stranger_things.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/assets/images/toystory.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/assets/images/toystory_0.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/assets/images/toystory_1.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/assets/images/toystory_2.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/lib/netflix/custom_cliper.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/lib/netflix/model/movie.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/lib/netflix/movie_page.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/lib/netflix/netflix_main.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_app/lib/travel/add_page.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_app/lib/travel/home_page.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_app/lib/travel/model/my_model.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_app/lib/travel/model/travel.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_app/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flutter_app/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/main.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flutter_app/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/pubspec.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flutter_app/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/pubspec.yaml" afterDir="false" />
@@ -47,7 +25,6 @@
   <component name="DefaultGradleProjectSettings">
     <option name="isMigrated" value="true" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="BH9026LH8Z" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -56,7 +33,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../FlutterExample/isolate_example" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />

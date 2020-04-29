@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/rxdart/rxdart.dart';
+import 'package:flutter_app/travel/home_page.dart';
 import 'package:flutter_app/travel_ui/travel_main.dart';
 
 import 'animation/easing_animation.dart';
@@ -10,7 +11,7 @@ import 'clock/clock.dart';
 import 'local_event_app/home/local_app_home.dart';
 import 'netflix/netflix_main.dart';
 
-void main() => runApp(NetflixMain());
+void main() => runApp(TravelPage());
 
 class MyApp extends StatefulWidget {
   // This widget is the root of your application.
