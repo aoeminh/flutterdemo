@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/travel/add_item_travel.dart';
 import 'package:flutter_app/travel/add_page.dart';
 import 'package:flutter_app/travel/model/my_model.dart';
 import 'package:provider/provider.dart';
@@ -10,8 +11,16 @@ import 'model/travel.dart';
 class TravelPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MyModel(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => MyModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => Travel(),
+        ),
+      ],
+
       child: MaterialApp(
         home: TravelHome(),
       ),
@@ -34,9 +43,10 @@ class _TravelHomeState extends State<TravelHome> {
           InkWell(
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AddPage()));
+                    MaterialPageRoute(builder: (context) => AddPage(travel: null,isEdit: false,)));
               },
-              child: Icon(Icons.add))
+              child: Container(
+                  margin: EdgeInsets.only(right: 10), child: Icon(Icons.add)))
         ],
       ),
       body: _buildBody(),
@@ -47,7 +57,6 @@ class _TravelHomeState extends State<TravelHome> {
         child: Center(
           child: Column(
             children: <Widget>[
-              Text('Hello'),
               Consumer<MyModel>(
                   builder: (context, model, child) => Container(
                         height: 500,
@@ -59,62 +68,74 @@ class _TravelHomeState extends State<TravelHome> {
                                   child: _buildItem(model.travels[index]))),
                         ),
                       )),
-
             ],
           ),
         ),
       );
 
   _buildItem(Travel travel) => Card(
-    color: Colors.blue,
-    child: Container(
-          height: 200,
-          padding: EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      '${travel.title}',
-                      style: TextStyle(fontSize: 30,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
+        color: Colors.blue,
+        child: InkWell(
+          onTap: () =>Navigator.push(context, MaterialPageRoute(builder: (context) =>AddItemTravel(travel))),
+          child: Container(
+            height: 200,
+            padding: EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        '${travel.title}',
+                        style: TextStyle(
+                            fontSize: 30,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.settings,color: Colors.white,),
-                    onPressed: () {},
-                  )
-                ],
-              ),
-              Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(_formatDate(travel.startDate),style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20
-                  ),),
-                  Text(getTime(travel.startDate, travel.endDate),style: TextStyle(
-                  color: Colors.white,
-                      fontSize: 20
-                  )),
-                  Text('${Random().nextInt(10) + 2} places',style: TextStyle(
-  color: Colors.white,
-  fontSize: 20
-  ))
-                ],
-              )
-            ],
+                    IconButton(
+                      icon: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AddPage(
+                                        travel: travel,
+                                        isEdit: true,
+                                      )));
+                        },
+                        child: Icon(
+                          Icons.settings,
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () {},
+                    )
+                  ],
+                ),
+                Spacer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      _formatDate(travel.startDate),
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    Text(getTime(travel.startDate, travel.endDate),
+                        style: TextStyle(color: Colors.white, fontSize: 20)),
+                    Text('${Random().nextInt(10) + 2} places',
+                        style: TextStyle(color: Colors.white, fontSize: 20))
+                  ],
+                )
+              ],
+            ),
           ),
         ),
-  );
+      );
 
   String _formatDate(int time) {
     int day = DateTime.fromMillisecondsSinceEpoch(time).day;
@@ -160,10 +181,8 @@ class _TravelHomeState extends State<TravelHome> {
     } else {
       DateTime startTime = DateTime.fromMillisecondsSinceEpoch(start);
       DateTime endTime = DateTime.fromMillisecondsSinceEpoch(end);
-      final different = endTime.difference(startTime).inDays;
-      print('dif $different');
-      double day = ((end = start)/ 86400000) ;
-      return '$day days';
+      final different = endTime.difference(startTime).inDays + 1;
+      return '$different days';
     }
   }
 }

@@ -13,4 +13,9 @@ class MyModel extends ChangeNotifier {
     this.travels.add(travel);
     notifyListeners();
   }
+
+  editTravel(int index, Travel travel){
+    travels[index] = travel;
+    notifyListeners();
+  }
 }

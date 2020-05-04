@@ -5,16 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4512816e-77a2-44bf-a043-cc90ba4165e4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/flutter_app/lib/travel/add_page.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/lib/travel/home_page.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/lib/travel/model/my_model.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flutter_app/lib/travel/model/travel.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_app/lib/travel/add_item_travel.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_app/lib/travel/model/item_travel.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flutter_app/lib/travel/utils.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/FlutterProject.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/FlutterProject.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_app/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_app/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_app/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_app/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/ios/Runner/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_app/lib/travel/add_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/travel/add_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_app/lib/travel/home_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/travel/home_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_app/lib/travel/model/my_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/travel/model/my_model.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_app/lib/travel/model/travel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_app/lib/travel/model/travel.dart" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -25,6 +25,7 @@
   <component name="DefaultGradleProjectSettings">
     <option name="isMigrated" value="true" />
   </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="Pixel_3_XL_API_29" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -34,10 +35,10 @@
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../FlutterExample/isolate_example" />
-    <property name="project.structure.last.edited" value="Project" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="project.structure.last.edited" value="Problems" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="flutter.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">

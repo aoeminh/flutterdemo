@@ -5,6 +5,11 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 class AddPage extends StatefulWidget {
+  final Travel travel;
+  final isEdit;
+
+  AddPage({this.travel, this.isEdit});
+
   @override
   _AddPageState createState() => _AddPageState();
 }
@@ -22,22 +27,31 @@ class _AddPageState extends State<AddPage> {
   @override
   void initState() {
     super.initState();
-    startDateController.text =
-        _formatDate(DateTime.now(), DateFormat('dd/MM/yyyy'));
-    endDateController.text =
-        _formatDate(DateTime.now(), DateFormat('dd/MM/yyyy'));
-    descriptionController.text = '';
+    if (widget.travel != null) {
+      titleController.text = widget.travel.title;
+      startDateController.text = _formatDate(
+          DateTime.fromMillisecondsSinceEpoch(widget.travel.startDate),
+          DateFormat('dd/MM/yyyy'));
 
-    startDate = DateTime.now().millisecondsSinceEpoch;
-    print('$startDate');
-    endDate = DateTime.now().millisecondsSinceEpoch;
+      endDateController.text = _formatDate(
+          DateTime.fromMillisecondsSinceEpoch(widget.travel.endDate),
+          DateFormat('dd/MM/yyyy'));
+      descriptionController.text = widget.travel.description;
+      endDate = widget.travel.endDate;
+      startDate = widget.travel.startDate;
+    } else {
+      descriptionController.text = '';
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.arrow_back),
+        leading: InkWell(
+            onTap: (){
+              Navigator.pop(context);
+            },child: Icon(Icons.arrow_back)),
         title: Text('Add trip'),
       ),
       body: SingleChildScrollView(
@@ -122,18 +136,25 @@ class _AddPageState extends State<AddPage> {
                   child: FlatButton(
                     color: Colors.blue,
                     onPressed: () {
-                      if(!_validate(context)){
+                      if (!_validate(context)) {
                         return;
                       }
-                      model.travels.add(Travel(
+                      Travel travel = Travel(
                           title: titleController.text,
                           startDate: startDate,
                           endDate: endDate,
-                          description: descriptionController.text));
+                          description: descriptionController.text);
+                      if (widget.isEdit) {
+                        model.editTravel(
+                            model.travels.indexOf(widget.travel), travel);
+                      } else {
+                        model.setTravel(travel);
+                      }
+
                       Navigator.pop(context);
                     },
                     child: Text(
-                      'ADD',
+                      widget.isEdit ? 'EDIT' : 'ADD',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -170,18 +191,23 @@ class _AddPageState extends State<AddPage> {
 
   bool _validate([BuildContext context]) {
     if (titleController.text.trim().isEmpty) {
-      _showAlert(context,'Title is required');
+      _showAlert(context, 'Title is required');
+      return false;
+    }
+
+    if (startDate == null || endDate == null) {
+      _showAlert(context, 'Choose date');
       return false;
     }
 
     if (endDate.compareTo(startDate) < 0) {
-      _showAlert(context,'End date not be smaller start date');
+      _showAlert(context, 'End date not be smaller start date');
       return false;
     }
     return true;
   }
 
-  _showAlert(BuildContext context,String content) {
+  _showAlert(BuildContext context, String content) {
     print(content);
     Scaffold.of(context).showSnackBar(SnackBar(
       content: Text(content),
