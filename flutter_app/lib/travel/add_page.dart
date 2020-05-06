@@ -15,7 +15,7 @@ class AddPage extends StatefulWidget {
 }
 
 class _AddPageState extends State<AddPage> {
-  DateTime selectedDate = DateTime.now();
+  DateTime selectedDate = DateTime.now().add(Duration(hours: 0,seconds: 0,milliseconds: 0,minutes: 0));
   String title;
   int startDate;
   int endDate;
@@ -56,6 +56,7 @@ class _AddPageState extends State<AddPage> {
       ),
       body: SingleChildScrollView(
         child: Container(
+          padding: EdgeInsets.all(10),
           child: Column(
             children: <Widget>[
               SizedBox(
@@ -179,9 +180,11 @@ class _AddPageState extends State<AddPage> {
         initialDate: selectedDate,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate)
+    print('$picked');
+    if (picked != null)
       setState(() {
-        valueChanged(picked);
+        DateTime date = new DateTime(picked.year,picked.month,picked.day,);
+        valueChanged(date);
       });
   }
 

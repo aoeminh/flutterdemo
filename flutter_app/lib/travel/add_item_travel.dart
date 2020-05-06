@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/travel/model/item_travel.dart';
 import 'package:flutter_app/travel/utils.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import 'model/travel.dart';
 
@@ -21,7 +23,7 @@ class _AddItemTravelState extends State<AddItemTravel> {
   TextEditingController timeController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   String title;
-  int startDate;
+  DateTime startDate;
   TimeOfDay time;
   DateTime selectedDate;
   File image;
@@ -33,6 +35,8 @@ class _AddItemTravelState extends State<AddItemTravel> {
         DateTime.fromMillisecondsSinceEpoch(widget.travel.startDate),
         DateFormat('dd/MM/yyy'));
     selectedDate = DateTime.fromMillisecondsSinceEpoch(widget.travel.startDate);
+
+    startDate = DateTime.fromMillisecondsSinceEpoch(widget.travel.startDate);
   }
 
   @override
@@ -41,7 +45,7 @@ class _AddItemTravelState extends State<AddItemTravel> {
       appBar: AppBar(
         leading: InkWell(
             onTap: () => Navigator.pop(context), child: Icon(Icons.arrow_back)),
-        title: Text(widget.travel.title),
+        title: Text('Add trip'),
       ),
       body: _buildBody(),
     );
@@ -74,9 +78,9 @@ class _AddItemTravelState extends State<AddItemTravel> {
                   Expanded(
                     child: InkWell(
                       onTap: () => _selectDate((DateTime datetime) {
-                        startDate = datetime.millisecondsSinceEpoch;
-                        startDateController.text = Utils.formatDate(
-                            datetime, DateFormat('dd/MM/yyyy'));
+                        startDate = datetime;
+                        startDateController.text =
+                            Utils.formatDate(datetime, DateFormat('dd/MMM'));
                       }, context),
                       child: TextFormField(
                         enabled: false,
@@ -117,6 +121,10 @@ class _AddItemTravelState extends State<AddItemTravel> {
                 height: 20,
               ),
               _buildChooseImage(),
+              SizedBox(
+                height: 20,
+              ),
+              _addButton(),
             ],
           ),
         ),
@@ -131,11 +139,16 @@ class _AddItemTravelState extends State<AddItemTravel> {
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           height: 250,
-          child: Icon(
-            Icons.photo,
-            size: 50,
-            color: Colors.grey,
-          ),
+          child: this.image == null
+              ? Icon(
+                  Icons.photo,
+                  size: 50,
+                  color: Colors.grey,
+                )
+              : Image.file(
+                  image,
+                  fit: BoxFit.cover,
+                ),
         ),
       );
 
@@ -158,6 +171,7 @@ class _AddItemTravelState extends State<AddItemTravel> {
   }
 
   _showBottomSheet() {
+    hideKeyBoard(context);
     showModalBottomSheet(
         context: context,
         backgroundColor: Colors.white,
@@ -173,10 +187,12 @@ class _AddItemTravelState extends State<AddItemTravel> {
                   ),
                   InkWell(
                       onTap: () {
-                        print('ssss');
-//                        Utils.pickImageFromCamera().then((image) {
-//                          this.image = image;
-//                        });
+                        Utils.pickImageFromCamera().then((image) {
+                          setState(() {
+                            Navigator.pop(context);
+                            this.image = image;
+                          });
+                        });
                       },
                       child: Container(
                         margin: EdgeInsets.all(10),
@@ -192,9 +208,12 @@ class _AddItemTravelState extends State<AddItemTravel> {
                   ),
                   InkWell(
                       onTap: () {
-//                        Utils.pickImageFromGallery().then((image) {
-//                          this.image = image;
-//                        });
+                        Utils.pickImageFromGallery().then((image) {
+                          setState(() {
+                            Navigator.pop(context);
+                            this.image = image;
+                          });
+                        });
                       },
                       child: Container(
                         margin: EdgeInsets.all(10),
@@ -212,5 +231,48 @@ class _AddItemTravelState extends State<AddItemTravel> {
       initialTime: TimeOfDay.now(),
     );
     return selectedTimeRTL;
+  }
+
+  _addButton() => Container(
+          child: Center(
+        child: Consumer<Travel>(
+          builder: (context, model, child) => InkWell(
+            child: FlatButton(
+              color: Colors.blue,
+              onPressed: () {
+                if (validate(context)) {
+                  model.addItemTravel(ItemTravel(
+                      title: titleController.text,
+                      image: image,
+                      time: startDate
+                          .add(Duration(hours: time.hour, minutes: time.minute))
+                          .millisecondsSinceEpoch));
+                  Navigator.pop(context);
+                }
+              },
+              child: Text('Add',style: TextStyle(color: Colors.white),),
+            ),
+          ),
+        ),
+      ));
+
+  bool validate(BuildContext context) {
+    if (titleController.text.trim().isEmpty) {
+      _showAlert(context, 'Title is required');
+      return false;
+    }
+
+    if (time == null) {
+      _showAlert(context, 'Time is required');
+      return false;
+    }
+    return true;
+  }
+
+  _showAlert(BuildContext context, String content) {
+    print(content);
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text(content),
+    ));
   }
 }

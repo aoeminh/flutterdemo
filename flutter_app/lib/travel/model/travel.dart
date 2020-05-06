@@ -7,11 +7,13 @@ class Travel extends ChangeNotifier{
   int startDate;
   int endDate;
   String description;
-  List<ItemTravel> itemTravels;
+  List<ItemTravel> itemTravels = [];
 
-  Travel({this.title, this.startDate, this.endDate, this.description,this.itemTravels});
+  Travel({this.title, this.startDate, this.endDate, this.description});
 
   void addItemTravel(ItemTravel itemTravel){
+    print('ssss');
+
     itemTravels.add(itemTravel);
     notifyListeners();
   }

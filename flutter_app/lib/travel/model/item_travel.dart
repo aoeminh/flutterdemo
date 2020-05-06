@@ -1,11 +1,12 @@
+import 'dart:io';
+
 class ItemTravel {
 
   String title;
   int time;
-  String description;
-  String imagePath;
+  File image;
 
-  ItemTravel({this.title, this.time, this.description, this.imagePath});
+  ItemTravel({this.title, this.time, this.image});
 
 
 }

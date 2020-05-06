@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/travel/add_item_travel.dart';
 import 'package:flutter_app/travel/add_page.dart';
 import 'package:flutter_app/travel/model/my_model.dart';
+import 'package:flutter_app/travel/utils.dart';
 import 'package:provider/provider.dart';
-
+import 'package:intl/intl.dart';
 import 'model/travel.dart';
+import 'travel_detail.dart';
 
 class TravelPage extends StatelessWidget {
   @override
@@ -20,7 +22,6 @@ class TravelPage extends StatelessWidget {
           create: (context) => Travel(),
         ),
       ],
-
       child: MaterialApp(
         home: TravelHome(),
       ),
@@ -42,8 +43,13 @@ class _TravelHomeState extends State<TravelHome> {
         actions: <Widget>[
           InkWell(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AddPage(travel: null,isEdit: false,)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddPage(
+                              travel: null,
+                              isEdit: false,
+                            )));
               },
               child: Container(
                   margin: EdgeInsets.only(right: 10), child: Icon(Icons.add)))
@@ -54,29 +60,31 @@ class _TravelHomeState extends State<TravelHome> {
   }
 
   _buildBody() => Container(
-        child: Center(
-          child: Column(
-            children: <Widget>[
-              Consumer<MyModel>(
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: Consumer<MyModel>(
                   builder: (context, model, child) => Container(
-                        height: 500,
-                        child: Center(
-                          child: ListView.builder(
-                              itemCount: model.travels.length,
-                              scrollDirection: Axis.vertical,
-                              itemBuilder: (context, index) => Center(
-                                  child: _buildItem(model.travels[index]))),
-                        ),
+                        child: ListView.builder(
+                            itemCount: model.travels.length,
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (context, index) => Center(
+                                child: _buildItem(model.travels[index]))),
                       )),
-            ],
-          ),
+            ),
+          ],
         ),
       );
 
   _buildItem(Travel travel) => Card(
         color: Colors.blue,
         child: InkWell(
-          onTap: () =>Navigator.push(context, MaterialPageRoute(builder: (context) =>AddItemTravel(travel))),
+          onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => TravelDetail(
+                        travel: travel,
+                      ))),
           child: Container(
             height: 200,
             padding: EdgeInsets.all(20),
@@ -138,40 +146,7 @@ class _TravelHomeState extends State<TravelHome> {
       );
 
   String _formatDate(int time) {
-    int day = DateTime.fromMillisecondsSinceEpoch(time).day;
-    int month = DateTime.fromMillisecondsSinceEpoch(time).month;
-    return '$day ${formatMonth(month)}';
-  }
-
-  String formatMonth(int month) {
-    switch (month) {
-      case DateTime.january:
-        return 'Jan';
-      case DateTime.february:
-        return 'Feb';
-      case DateTime.march:
-        return 'Mar';
-      case DateTime.april:
-        return 'Apr';
-      case DateTime.may:
-        return 'May';
-      case DateTime.june:
-        return 'Jun';
-      case DateTime.july:
-        return 'Jul';
-      case DateTime.august:
-        return 'Aug';
-      case DateTime.september:
-        return 'Sep';
-      case DateTime.october:
-        return 'Oct';
-      case DateTime.november:
-        return 'Nov';
-      case DateTime.december:
-        return 'Dec';
-      default:
-        return '';
-    }
+    return '${Utils.formatDate(DateTime.fromMillisecondsSinceEpoch(time), DateFormat('dd MMM'))}';
   }
 
   String getTime(int start, int end) {
