@@ -7,14 +7,20 @@ class Travel extends ChangeNotifier{
   int startDate;
   int endDate;
   String description;
-  List<ItemTravel> itemTravels = [];
+  Map<DateTime,List<ItemTravel>> item;
 
   Travel({this.title, this.startDate, this.endDate, this.description});
 
-  void addItemTravel(ItemTravel itemTravel){
-    print('ssss');
-
-    itemTravels.add(itemTravel);
+  void addItemTravel(DateTime key,ItemTravel itemTravel){
+    if(item ==null) {
+      item = Map<DateTime,List<ItemTravel>>();
+    }
+    if(item.containsKey(key)){
+      item[key].add(itemTravel);
+    }else{
+      item[key] = List<ItemTravel>();
+      item[key].add(itemTravel);
+    }
     notifyListeners();
   }
 

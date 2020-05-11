@@ -241,7 +241,7 @@ class _AddItemTravelState extends State<AddItemTravel> {
               color: Colors.blue,
               onPressed: () {
                 if (validate(context)) {
-                  model.addItemTravel(ItemTravel(
+                  model.addItemTravel(startDate,ItemTravel(
                       title: titleController.text,
                       image: image,
                       time: startDate
