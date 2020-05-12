@@ -45,29 +45,27 @@ class _TravelDetailState extends State<TravelDetail> {
         child: Column(
           children: <Widget>[
             Consumer<Travel>(builder: (context, model, child) {
-              List<DateTime> iterable = model.item.keys.toList();
-              iterable.sort((item1, item2) => item1.compareTo(item2));
-              iterable.forEach(print);
-              // sort time
-
+              List<DateTime> iterable;
+              if (model.item != null) {
+                iterable = model.item.keys.toList();
+                iterable.sort((item1, item2) => item1.compareTo(item2));
+                iterable.forEach(print);
+              }
               return Expanded(
                 child: model.item != null
                     ? ListView.builder(
                         itemCount: model.item.length,
                         scrollDirection: Axis.vertical,
                         itemBuilder: (context, index) {
-                          model.item[iterable.toList()[index]].sort(
-                              (item1, item2) =>
-                                  item1.time.compareTo(item2.time));
-
+                          model.item[iterable[index]].sort((item1, item2) =>
+                              item1.time.compareTo(item2.time));
                           return Column(
                             children: <Widget>[
                               _buildHeader(Utils.formatDate(
-                                  iterable[index],
-                                  DateFormat('dd MMM'))),
+                                  iterable[index], DateFormat('dd MMM'))),
                               Column(
                                 children: <Widget>[
-                                  ...model.item[iterable.toList()[index]]
+                                  ...model.item[iterable[index]]
                                       .map((e) => _buildItem(e))
                                 ],
                               )

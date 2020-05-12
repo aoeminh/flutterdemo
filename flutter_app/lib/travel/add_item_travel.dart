@@ -1,11 +1,13 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/travel/model/item_travel.dart';
 import 'package:flutter_app/travel/utils.dart';
 import 'package:intl/intl.dart';
+import 'package:location/location.dart';
 import 'package:provider/provider.dart';
-
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'model/travel.dart';
 
 class AddItemTravel extends StatefulWidget {
@@ -22,15 +24,29 @@ class _AddItemTravelState extends State<AddItemTravel> {
   TextEditingController titleController = TextEditingController();
   TextEditingController timeController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  Completer<GoogleMapController> _controller = Completer();
+
   String title;
   DateTime startDate;
+  String locationUrl;
   TimeOfDay time;
   DateTime selectedDate;
   File image;
+  static final CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(37.42796133580664, -122.085749655962),
+    zoom: 14.4746,
+  );
+
+  static final CameraPosition _kLake = CameraPosition(
+      bearing: 192.8334901395799,
+      target: LatLng(37.43296265331129, -122.08832357078792),
+      tilt: 59.440717697143555,
+      zoom: 19.151926040649414);
 
   @override
   void initState() {
     super.initState();
+    locationUrl = '';
     startDateController.text = Utils.formatDate(
         DateTime.fromMillisecondsSinceEpoch(widget.travel.startDate),
         DateFormat('dd/MM/yyy'));
@@ -124,6 +140,10 @@ class _AddItemTravelState extends State<AddItemTravel> {
               SizedBox(
                 height: 20,
               ),
+              _buildMap(),
+              SizedBox(
+                height: 20,
+              ),
               _addButton(),
             ],
           ),
@@ -151,6 +171,78 @@ class _AddItemTravelState extends State<AddItemTravel> {
                 ),
         ),
       );
+
+  _buildMap() => Container(
+          child: Column(
+        children: <Widget>[
+          Container(
+            height: 200,
+            width: double.infinity,
+            decoration: BoxDecoration(
+                border: Border.all(width: 1, color: Colors.grey),
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            child: Image.network(
+              locationUrl,
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              InkWell(
+                onTap: () {
+                  _choseLocation();
+                },
+                child: Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.add_location,
+                      color: Colors.blue,
+                    ),
+                    Text('Current Location'),
+                  ],
+                ),
+              ),
+              Row(
+                children: <Widget>[
+                  Icon(
+                    Icons.map,
+                    color: Colors.blue,
+                  ),
+                  Text('Open Map'),
+                ],
+              ),
+            ],
+          )
+        ],
+      ));
+
+  _choseLocation() async{
+    Location location = new Location();
+
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+    LocationData _locationData;
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    _locationData = await location.getLocation();
+  }
 
   Future<Null> _selectDate(
       ValueChanged<DateTime> valueChanged, BuildContext context) async {
@@ -241,16 +333,22 @@ class _AddItemTravelState extends State<AddItemTravel> {
               color: Colors.blue,
               onPressed: () {
                 if (validate(context)) {
-                  model.addItemTravel(startDate,ItemTravel(
-                      title: titleController.text,
-                      image: image,
-                      time: startDate
-                          .add(Duration(hours: time.hour, minutes: time.minute))
-                          .millisecondsSinceEpoch));
+                  model.addItemTravel(
+                      startDate,
+                      ItemTravel(
+                          title: titleController.text,
+                          image: image,
+                          time: startDate
+                              .add(Duration(
+                                  hours: time.hour, minutes: time.minute))
+                              .millisecondsSinceEpoch));
                   Navigator.pop(context);
                 }
               },
-              child: Text('Add',style: TextStyle(color: Colors.white),),
+              child: Text(
+                'Add',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ),

@@ -44,5 +44,7 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<key>NSCameraUsageDescription</key>
 	<key>NSMicrophoneUsageDescription</key>
+	NSLocationWhenInUseUsageDescription
+    NSLocationAlwaysUsageDescription
 </dict>
 </plist>
