@@ -362,11 +362,14 @@ class _AddItemTravelState extends State<AddItemTravel> {
                       startDate,
                       ItemTravel(
                           title: titleController.text,
-                          image: image,
+                          image: image.path,
                           time: startDate
                               .add(Duration(
                                   hours: time.hour, minutes: time.minute))
-                              .millisecondsSinceEpoch));
+                              .millisecondsSinceEpoch,
+                          lat: latLng.latitude,
+                          lng: latLng.longitude,
+                          location: address));
                   Navigator.pop(context);
                 }
               },

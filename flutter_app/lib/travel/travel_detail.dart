@@ -124,12 +124,13 @@ class _TravelDetailState extends State<TravelDetail> {
               margin: EdgeInsets.only(left: 59),
             ),
             Container(
-              padding: EdgeInsets.only(top: 10, bottom: 10),
+              padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   color: Colors.blue),
               margin: EdgeInsets.only(left: 10, right: 10),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -153,17 +154,24 @@ class _TravelDetailState extends State<TravelDetail> {
                               fontWeight: FontWeight.bold))
                     ],
                   ),
+                  travel.location !=null ?Text('${travel.location}',style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.bold)) :Container(),
+
                   travel.image == null
                       ? Container()
                       : Container(
                           margin: EdgeInsets.only(top: 10),
                           width: double.infinity,
-                          child: Image.file(
+                          child: Image.asset(
                             travel.image,
                             height: 300,
                             fit: BoxFit.cover,
                           ),
-                        )
+                        ),
+
                 ],
               ),
             )

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "121136201706",
+    "firebase_url": "https://travel-app-ac840.firebaseio.com",
+    "project_id": "travel-app-ac840",
+    "storage_bucket": "travel-app-ac840.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:121136201706:android:97536292618e827e7e3c93",
+        "android_client_info": {
+          "package_name": "com.example.flutter_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "121136201706-bg0367dj92j72iustsq8j1rg38cp564n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABqDrgaRbgKSuLr3xZRTJfWBqYbX5AQa8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "121136201706-bg0367dj92j72iustsq8j1rg38cp564n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
