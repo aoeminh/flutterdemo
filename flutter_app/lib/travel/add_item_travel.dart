@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/travel/map.dart';
 import 'package:flutter_app/travel/model/item_travel.dart';
 import 'package:flutter_app/travel/utils.dart';
 import 'package:intl/intl.dart';
@@ -29,24 +30,19 @@ class _AddItemTravelState extends State<AddItemTravel> {
   String title;
   DateTime startDate;
   String locationUrl;
+  String address;
   TimeOfDay time;
   DateTime selectedDate;
   File image;
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
-
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
+  bool isShowLoading;
+  LatLng latLng;
 
   @override
   void initState() {
     super.initState();
+    isShowLoading = false;
     locationUrl = '';
+    address = '';
     startDateController.text = Utils.formatDate(
         DateTime.fromMillisecondsSinceEpoch(widget.travel.startDate),
         DateFormat('dd/MM/yyy'));
@@ -172,40 +168,66 @@ class _AddItemTravelState extends State<AddItemTravel> {
         ),
       );
 
-  _buildMap() => Container(
-          child: Column(
-        children: <Widget>[
-          Container(
+  Widget _buildMap() {
+    return Container(
+        child: Column(
+      children: <Widget>[
+        Container(
             height: 200,
             width: double.infinity,
             decoration: BoxDecoration(
-                border: Border.all(width: 1, color: Colors.grey),
+                border: Border.all(color: Colors.grey, width: 1),
                 borderRadius: BorderRadius.all(Radius.circular(10))),
-            child: Image.network(
-              locationUrl,
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              InkWell(
-                onTap: () {
-                  _choseLocation();
-                },
-                child: Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.add_location,
-                      color: Colors.blue,
-                    ),
-                    Text('Current Location'),
-                  ],
+            child: Stack(
+              children: <Widget>[
+                ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  child: Image.network(
+                    locationUrl,
+                    fit: BoxFit.cover,
+                  ),
                 ),
+                Offstage(
+                  offstage: !isShowLoading,
+                  child: Container(
+                    color: Colors.white.withOpacity(0.8),
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            )),
+        SizedBox(
+          height: 10,
+        ),
+        Text(address),
+        SizedBox(
+          height: 10,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            InkWell(
+              onTap: () {
+                _showLoading();
+                _choseLocation();
+              },
+              child: Row(
+                children: <Widget>[
+                  Icon(
+                    Icons.add_location,
+                    color: Colors.blue,
+                  ),
+                  Text('Current Location'),
+                ],
               ),
-              Row(
+            ),
+            InkWell(
+              onTap: _navigateToChooseLocation,
+              child: Row(
                 children: <Widget>[
                   Icon(
                     Icons.map,
@@ -214,12 +236,14 @@ class _AddItemTravelState extends State<AddItemTravel> {
                   Text('Open Map'),
                 ],
               ),
-            ],
-          )
-        ],
-      ));
+            ),
+          ],
+        )
+      ],
+    ));
+  }
 
-  _choseLocation() async{
+  _choseLocation() async {
     Location location = new Location();
 
     bool _serviceEnabled;
@@ -240,8 +264,9 @@ class _AddItemTravelState extends State<AddItemTravel> {
         return;
       }
     }
-
     _locationData = await location.getLocation();
+    _setMap(_locationData.latitude, _locationData.longitude);
+    _hideLoading();
   }
 
   Future<Null> _selectDate(
@@ -367,10 +392,42 @@ class _AddItemTravelState extends State<AddItemTravel> {
     return true;
   }
 
+  _showLoading() {
+    setState(() {
+      isShowLoading = true;
+    });
+  }
+
+  _hideLoading() {
+    setState(() {
+      isShowLoading = false;
+    });
+  }
+
   _showAlert(BuildContext context, String content) {
     print(content);
     Scaffold.of(context).showSnackBar(SnackBar(
       content: Text(content),
     ));
+  }
+
+  _navigateToChooseLocation() async {
+    LatLng latLng = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ChooseLocation()),
+    );
+    if (latLng != null) {
+      this.latLng = latLng;
+    }
+    _setMap(this.latLng.latitude, this.latLng.longitude);
+  }
+
+  _setMap(double lat, double long) async {
+    latLng = LatLng(lat, long);
+    address = await Utils.getPlaceAddress(lat, long);
+    setState(() {
+      locationUrl =
+          Utils.generateLocationPreviewImage(latitude: lat, longitude: long);
+    });
   }
 }
