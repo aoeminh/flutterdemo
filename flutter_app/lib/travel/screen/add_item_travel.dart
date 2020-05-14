@@ -2,14 +2,14 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/travel/map.dart';
+import 'file:///E:/MinhGVN/FlutterProject/flutter_app/lib/travel/screen/map.dart';
 import 'package:flutter_app/travel/model/item_travel.dart';
+import 'package:flutter_app/travel/model/travel.dart';
 import 'package:flutter_app/travel/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'model/travel.dart';
 
 class AddItemTravel extends StatefulWidget {
   final Travel travel;

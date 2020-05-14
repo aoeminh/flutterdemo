@@ -1,13 +1,15 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/travel/add_item_travel.dart';
-import 'package:flutter_app/travel/add_page.dart';
 import 'package:flutter_app/travel/model/my_model.dart';
+import 'package:flutter_app/travel/model/travel.dart';
 import 'package:flutter_app/travel/utils.dart';
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import 'model/travel.dart';
+import 'package:provider/provider.dart';
+
+import 'file:///E:/MinhGVN/FlutterProject/flutter_app/lib/travel/screen/add_page.dart';
+
+import 'sign_in_page.dart';
 import 'travel_detail.dart';
 
 class TravelPage extends StatelessWidget {
@@ -23,7 +25,7 @@ class TravelPage extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        home: TravelHome(),
+        home: SignIn(),
       ),
     );
   }

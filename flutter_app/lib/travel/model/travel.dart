@@ -1,5 +1,6 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_app/travel/model/item_travel.dart';
+import 'package:flutter/material.dart';
+
+import 'item_travel.dart';
 
 class Travel extends ChangeNotifier{
 

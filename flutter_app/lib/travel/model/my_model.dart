@@ -1,7 +1,8 @@
 import 'dart:core';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_app/travel/model/travel.dart';
+
+import 'travel.dart';
 
 class MyModel extends ChangeNotifier {
   List<Travel> travels = [];

@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/travel/add_item_travel.dart';
 import 'package:flutter_app/travel/model/item_travel.dart';
 import 'package:flutter_app/travel/model/travel.dart';
 import 'package:flutter_app/travel/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+
+import 'add_item_travel.dart';
 
 class TravelDetail extends StatefulWidget {
   final Travel travel;
