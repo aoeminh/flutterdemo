@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/travel/screen/sign_up.dart';
+import 'package:flutter_app/travel/widget/text_form_field_widget.dart';
+
+import '../utils.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -13,8 +16,6 @@ class _SignInState extends State<SignIn> {
   final passFocusNote = FocusNode();
   String username;
   String password;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -33,50 +34,39 @@ class _SignInState extends State<SignIn> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                TextFormField(
-                  decoration: InputDecoration(
-                    border: new UnderlineInputBorder(
-                        borderSide: new BorderSide(color: Colors.white)),
-                    hintText: 'User name',
-                  ),
-                  textInputAction: TextInputAction.next,
+                TextFormFieldWidget(
+                  hintText: 'Email',
                   focusNode: usernameFocusNote,
-                  style: TextStyle(
-                    color: Colors.white
-                  ),
-
-                  cursorColor: Colors.white,
-                  keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
                   onFieldSubmitted: (v) =>
                       FocusScope.of(context).requestFocus(passFocusNote),
-                  onSaved: (value) {
+                  onSave: (value) {
                     username = value;
                   },
-                  validator: (value) {
-                    if (value.trim().length <= 0) {
-                      return 'Username is empty';
+                  onValidate: (value) {
+                    if (value.trim().length < 0) {
+                      return 'Email is empty';
+                    } else if (!Utils.isEmail(value)) {
+                      return 'Email invalid';
                     } else {
                       return null;
                     }
                   },
                 ),
-                TextFormField(
-                  decoration: InputDecoration(
-                    border: new UnderlineInputBorder(
-                        borderSide: new BorderSide(color: Colors.white)),
-                    hintText: 'Password',
-                  ),
-                  obscureText: true,
-                  textInputAction: TextInputAction.done,
-                  style: TextStyle(
-                      color: Colors.white
-                  ),
-                  cursorColor: Colors.white,
+                SizedBox(
+                  height: 10,
+                ),
+                TextFormFieldWidget(
+                  hintText: 'Password',
                   focusNode: passFocusNote,
-                  onSaved: (value) {
+                  textInputAction: TextInputAction.next,
+                  obscureText: true,
+                  onFieldSubmitted: (v) =>
+                      FocusScope.of(context).requestFocus(passFocusNote),
+                  onSave: (value) {
                     password = value;
                   },
-                  validator: (value) {
+                  onValidate: (value) {
                     if (value.trim().length < 6) {
                       return 'Password must greater than 6 character';
                     } else {
@@ -85,34 +75,44 @@ class _SignInState extends State<SignIn> {
                   },
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 50,
                 ),
                 InkWell(
                   child: Container(
-                    width: 100,
-                    height: 30,
+                    width: 300,
+                    height: 50,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderRadius: BorderRadius.all(Radius.circular(30)),
                       color: Colors.white,
                     ),
                     child: Center(
                       child: Text(
                         'Login',
                         style: TextStyle(
-                            color: Colors.blue, fontWeight: FontWeight.bold),
+                            color: Colors.blue, fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 InkWell(
-                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp())),
-                  child: Text(
-                    'Sign up now',
-                    style: TextStyle(
-                        color: Colors.white, fontStyle: FontStyle.italic),
+                  onTap: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SignUp())),
+                  child: RichText(
+                  text: TextSpan(
+                    text: 'Don\'t have an Account? ',
+                    children: [
+                      TextSpan(
+                        text: 'Sign up',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        )
+                      )
+                    ]
+                  ),
                   ),
                 )
               ],

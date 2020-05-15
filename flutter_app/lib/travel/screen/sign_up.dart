@@ -1,7 +1,11 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_app/travel/model/user.dart';
+import 'package:flutter_app/chat/Util.dart';
+import 'package:flutter_app/travel/firebase/authetication.dart';
+import 'package:flutter_app/travel/widget/text_form_field_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import '../utils.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -18,11 +22,18 @@ class _SignUpState extends State<SignUp> {
   final key = GlobalKey<FormState>();
   final firebaseDB = FirebaseDatabase.instance;
   DatabaseReference reference;
+  FirebaseAuth _auth;
+
+  bool isShowLoading;
+  bool isClick;
 
   @override
   void initState() {
     super.initState();
+    isShowLoading = false;
+    isClick = true;
     reference = firebaseDB.reference();
+    _auth = FirebaseAuth.instance;
   }
 
   Widget build(BuildContext context) {
@@ -32,132 +43,183 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  _buildBody() =>
-      SingleChildScrollView(
-
-        child: Container(
-            margin: EdgeInsets.only(top: 200),
-            padding: EdgeInsets.only(left: 20, right: 20),
-            child: Form(
-              key: key,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  TextFormField(
-                    decoration: InputDecoration(
-                      border: new UnderlineInputBorder(
-                          borderSide: new BorderSide(color: Colors.white)),
-                      hintText: 'User name',
-                    ),
-                    textInputAction: TextInputAction.next,
-                    focusNode: usernameFocusNote,
-
-                    style: TextStyle(
-                        color: Colors.white
-                    ),
-                    cursorColor: Colors.white,
-                    keyboardType: TextInputType.emailAddress,
-                    onFieldSubmitted: (v) =>
-                        FocusScope.of(context).requestFocus(passFocusNote),
-                    onSaved: (value) {
-                      username = value;
-                    },
-                    validator: (value) {
-                      if (value
-                          .trim()
-                          .length <= 0) {
-                        return 'Username is empty';
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      border: new UnderlineInputBorder(
-                          borderSide: new BorderSide(color: Colors.white)),
-                      hintText: 'Password',
-                    ),
-                    obscureText: true,
-                    textInputAction: TextInputAction.next,
-                    style: TextStyle(
-                        color: Colors.white
-                    ),
-                    cursorColor: Colors.white,
-                    focusNode: passFocusNote,
-                    onSaved: (value) {
-                      password = value;
-                    },
-                    onFieldSubmitted: (v) =>
-                        FocusScope.of(context).requestFocus(rePassFocusNote),
-                    validator: (value) {
-                      if (value
-                          .trim()
-                          .length < 6) {
-                        return 'Password must greater than 6 character';
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      border: new UnderlineInputBorder(
-                          borderSide: new BorderSide(color: Colors.white)),
-                      hintText: 'Password again',
-
-                    ),
-                    obscureText: true,
-                    textInputAction: TextInputAction.done,
-                    style: TextStyle(
-                        color: Colors.white
-                    ),
-                    cursorColor: Colors.white,
-                    focusNode: rePassFocusNote,
-                    onSaved: (value) {
-                      rePassword = value;
-                    },
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  InkWell(
-
-                    onTap: () {
-                      key.currentState.save();
-                      print(username);
-                      reference.child('users').child(username).set({
-                        'username': username,
-                        'pass': password
-                      });
-                    },
-                    child: Container(
-                      width: 100,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        color: Colors.white,
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Sign up',
-                          style: TextStyle(
-                              color: Colors.blue, fontWeight: FontWeight.bold),
+  _buildBody() => Center(
+        child: Stack(
+          children: <Widget>[
+            SingleChildScrollView(
+              child: Container(
+                  margin: EdgeInsets.only(top: 50),
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  child: Form(
+                    key: key,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        TextFormFieldWidget(
+                          hintText: 'Email',
+                          focusNode: usernameFocusNote,
+                          textInputAction: TextInputAction.next,
+                          onFieldSubmitted: (v) => FocusScope.of(context)
+                              .requestFocus(passFocusNote),
+                          onSave: (value) {
+                            username = value;
+                          },
+                          onValidate: (value) {
+                            if (value.trim().length < 0) {
+                              return 'Email is empty';
+                            } else if (Utils.isEmail(value)) {
+                              return 'Email invalid';
+                            } else {
+                              return null;
+                            }
+                          },
                         ),
-                      ),
+                        SizedBox(height: 10,),
+                        TextFormFieldWidget(
+                          hintText: 'Password',
+                          focusNode: passFocusNote,
+                          textInputAction: TextInputAction.next,
+                          obscureText: true,
+                          onFieldSubmitted: (v) => FocusScope.of(context)
+                              .requestFocus(passFocusNote),
+                          onSave: (value) {
+                            password = value;
+                          },
+                          onValidate: (value) {
+                            if (value.trim().length < 6) {
+                              return 'Password must greater than 6 character';
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                        SizedBox(height: 10,),
+                        TextFormFieldWidget(
+                          hintText: 'Confirm password',
+                          focusNode: rePassFocusNote,
+                          textInputAction: TextInputAction.done,
+                          obscureText: true,
+                          onSave: (value) {
+                            rePassword = value.trim();
+                          },
+                          onValidate: (value) {
+                            if (value != password) {
+                              return 'Confirm Password not equal Password';
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Offstage(
+                          offstage: !isShowLoading,
+                          child: Container(
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                strokeWidth: 1,
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 50,
+                        ),
+                        InkWell(
+                          onTap: isClick ? _signUp : () {},
+                          child: Container(
+                            width: 300,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(30)),
+                              color: Colors.white,
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Sign up',
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        InkWell(
+                          onTap: () => Navigator.pop(context),
+                          child: RichText(
+                            text:
+                                TextSpan(text: 'Have an Account? ', children: [
+                              TextSpan(
+                                  text: 'Sign in',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ))
+                            ]),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        )
+                      ],
                     ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    'Login',
-                    style: TextStyle(
-                        color: Colors.white, fontStyle: FontStyle.italic),
-                  )
-                ],
-              ),
-            )
+                  )),
+            ),
+          ],
         ),
       );
+
+  _showLoading() {
+    setState(() {
+      isShowLoading = true;
+    });
+  }
+
+  _hideLoading() {
+    setState(() {
+      isShowLoading = false;
+    });
+  }
+
+  _signUp() async {
+    Utils.hideKeyBoard(context);
+    key.currentState.save();
+    if (key.currentState.validate()) {
+      _showLoading();
+      print(username);
+      Authentication.instance
+          .firebaseAuth()
+          .createUserWithEmailAndPassword(email: username, password: password)
+          .then((value) {
+        FirebaseUser user = value.user;
+        reference
+            .child('users')
+            .child(user.uid)
+            .set({'username': user.email, 'pass': password}).then((value) {
+          Utils.showDialogNotify(
+              context: context,
+              content: 'Register successful',
+              callback: () => Navigator.pop(context));
+          _hideLoading();
+          isClick = true;
+        });
+      }).catchError((onError) {
+        Utils.showDialogNotify(
+          context: context,
+          content: onError.toString(),
+        );
+        _hideLoading();
+        isClick = true;
+      });
+    }
+  }
 }
