@@ -18,14 +18,14 @@ class Authentication {
   }
 
   Future<FirebaseUser> signUp(String email, String password) async {
-    FirebaseUser user = (await _auth.createUserWithEmailAndPassword(
+    FirebaseUser user = (await firebaseAuth().createUserWithEmailAndPassword(
             email: email, password: password))
         .user;
     return user;
   }
 
   Future<FirebaseUser> signIn(String email, String password) async {
-    FirebaseUser user = (await _auth.signInWithEmailAndPassword(
+    FirebaseUser user = (await firebaseAuth().signInWithEmailAndPassword(
         email: email, password: password))
         .user;
     return user;

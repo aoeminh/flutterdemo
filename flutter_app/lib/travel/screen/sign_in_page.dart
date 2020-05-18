@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_app/travel/firebase/authetication.dart';
 import 'package:flutter_app/travel/screen/sign_up.dart';
 import 'package:flutter_app/travel/widget/text_form_field_widget.dart';
 
 import '../utils.dart';
+import 'home_page.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -16,6 +19,15 @@ class _SignInState extends State<SignIn> {
   final passFocusNote = FocusNode();
   String username;
   String password;
+  bool isShowLoading;
+  bool isClick;
+
+  @override
+  void initState() {
+    super.initState();
+    isShowLoading = false;
+    isClick = true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +89,22 @@ class _SignInState extends State<SignIn> {
                 SizedBox(
                   height: 50,
                 ),
+                Offstage(
+                  offstage: !isShowLoading,
+                  child: Container(
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 1,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
                 InkWell(
+                  onTap: isClick ? _signIn : () {},
                   child: Container(
                     width: 300,
                     height: 50,
@@ -89,7 +116,8 @@ class _SignInState extends State<SignIn> {
                       child: Text(
                         'Login',
                         style: TextStyle(
-                            color: Colors.blue, fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -102,17 +130,13 @@ class _SignInState extends State<SignIn> {
                   onTap: () => Navigator.push(context,
                       MaterialPageRoute(builder: (context) => SignUp())),
                   child: RichText(
-                  text: TextSpan(
-                    text: 'Don\'t have an Account? ',
-                    children: [
+                    text: TextSpan(text: 'Don\'t have an Account? ', children: [
                       TextSpan(
-                        text: 'Sign up',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        )
-                      )
-                    ]
-                  ),
+                          text: 'Sign up',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ))
+                    ]),
                   ),
                 )
               ],
@@ -122,7 +146,51 @@ class _SignInState extends State<SignIn> {
       );
 
   _signIn() {
-    key.currentState.validate();
+    Utils.hideKeyBoard(context);
     key.currentState.save();
+    if (key.currentState.validate()) {
+      _showLoading();
+      isClick = false;
+      Authentication.instance.signIn(username, password).then((value) {
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> TravelHome()));
+      }).catchError(( PlatformException error) {
+        Utils.showDialogNotify(
+          context: context,
+          content: error.toString(),
+          callback: (){}
+        );
+      }).whenComplete(() {
+        _hideLoading();
+        isClick = true;
+      });
+//      Authentication.instance
+//          .firebaseAuth()
+//          .signInWithEmailAndPassword(email: username, password: password)
+//          .then((value) {
+//        Navigator.push(context, MaterialPageRoute(builder: (context)=> TravelHome()));
+//      }).catchError(( error) {
+//       print('ssssss ${ error.code}');
+//        Utils.showDialogNotify(
+//          context: context,
+//          content: error.toString(),
+//          callback: (){}
+//        );
+//      }).whenComplete(() {
+//        _hideLoading();
+//        isClick = true;
+//      });
+    }
+  }
+
+  _showLoading() {
+    setState(() {
+      isShowLoading = true;
+    });
+  }
+
+  _hideLoading() {
+    setState(() {
+      isShowLoading = false;
+    });
   }
 }

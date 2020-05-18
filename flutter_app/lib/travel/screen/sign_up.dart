@@ -1,9 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/chat/Util.dart';
 import 'package:flutter_app/travel/firebase/authetication.dart';
+import 'package:flutter_app/travel/firebase/firebasedb.dart';
 import 'package:flutter_app/travel/widget/text_form_field_widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import '../utils.dart';
 
@@ -22,7 +22,6 @@ class _SignUpState extends State<SignUp> {
   final key = GlobalKey<FormState>();
   final firebaseDB = FirebaseDatabase.instance;
   DatabaseReference reference;
-  FirebaseAuth _auth;
 
   bool isShowLoading;
   bool isClick;
@@ -33,7 +32,6 @@ class _SignUpState extends State<SignUp> {
     isShowLoading = false;
     isClick = true;
     reference = firebaseDB.reference();
-    _auth = FirebaseAuth.instance;
   }
 
   Widget build(BuildContext context) {
@@ -67,14 +65,16 @@ class _SignUpState extends State<SignUp> {
                           onValidate: (value) {
                             if (value.trim().length < 0) {
                               return 'Email is empty';
-                            } else if (Utils.isEmail(value)) {
+                            } else if (!Utils.isEmail(value)) {
                               return 'Email invalid';
                             } else {
                               return null;
                             }
                           },
                         ),
-                        SizedBox(height: 10,),
+                        SizedBox(
+                          height: 10,
+                        ),
                         TextFormFieldWidget(
                           hintText: 'Password',
                           focusNode: passFocusNote,
@@ -93,7 +93,9 @@ class _SignUpState extends State<SignUp> {
                             }
                           },
                         ),
-                        SizedBox(height: 10,),
+                        SizedBox(
+                          height: 10,
+                        ),
                         TextFormFieldWidget(
                           hintText: 'Confirm password',
                           focusNode: rePassFocusNote,
@@ -193,22 +195,22 @@ class _SignUpState extends State<SignUp> {
   _signUp() async {
     Utils.hideKeyBoard(context);
     key.currentState.save();
+    isClick = true;
     if (key.currentState.validate()) {
       _showLoading();
-      print(username);
-      Authentication.instance
-          .firebaseAuth()
-          .createUserWithEmailAndPassword(email: username, password: password)
-          .then((value) {
-        FirebaseUser user = value.user;
-        reference
-            .child('users')
-            .child(user.uid)
-            .set({'username': user.email, 'pass': password}).then((value) {
+      Authentication.instance.signUp(username, password).then((user) {
+        FirebaseDB.instance.addUserIntoFirebase(user, password).then((value) {
           Utils.showDialogNotify(
               context: context,
               content: 'Register successful',
               callback: () => Navigator.pop(context));
+          _hideLoading();
+          isClick = true;
+        }).catchError((onError) {
+          Utils.showDialogNotify(
+            context: context,
+            content: onError.toString(),
+          );
           _hideLoading();
           isClick = true;
         });
