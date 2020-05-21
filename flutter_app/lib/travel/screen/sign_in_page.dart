@@ -152,7 +152,7 @@ class _SignInState extends State<SignIn> {
       _showLoading();
       isClick = false;
       Authentication.instance.signIn(username, password).then((value) {
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> TravelHome()));
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> TravelHome()),(r)=>false);
       }).catchError(( PlatformException error) {
         Utils.showDialogNotify(
           context: context,
@@ -163,22 +163,6 @@ class _SignInState extends State<SignIn> {
         _hideLoading();
         isClick = true;
       });
-//      Authentication.instance
-//          .firebaseAuth()
-//          .signInWithEmailAndPassword(email: username, password: password)
-//          .then((value) {
-//        Navigator.push(context, MaterialPageRoute(builder: (context)=> TravelHome()));
-//      }).catchError(( error) {
-//       print('ssssss ${ error.code}');
-//        Utils.showDialogNotify(
-//          context: context,
-//          content: error.toString(),
-//          callback: (){}
-//        );
-//      }).whenComplete(() {
-//        _hideLoading();
-//        isClick = true;
-//      });
     }
   }
 

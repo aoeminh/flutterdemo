@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/travel/firebase/authetication.dart';
+import 'package:flutter_app/travel/firebase/firebasedb.dart';
 import 'package:flutter_app/travel/model/my_model.dart';
 import 'package:flutter_app/travel/model/travel.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +21,7 @@ class _AddPageState extends State<AddPage> {
   String title;
   int startDate;
   int endDate;
+  String uidFirebase;
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
   TextEditingController titleController = TextEditingController();
@@ -42,6 +45,10 @@ class _AddPageState extends State<AddPage> {
     } else {
       descriptionController.text = '';
     }
+     Authentication.instance.firebaseAuth().currentUser().then((value) {
+      uidFirebase = value.uid;
+    });
+
   }
 
   @override
@@ -140,18 +147,8 @@ class _AddPageState extends State<AddPage> {
                       if (!_validate(context)) {
                         return;
                       }
-                      Travel travel = Travel(
-                          title: titleController.text,
-                          startDate: startDate,
-                          endDate: endDate,
-                          description: descriptionController.text);
-                      if (widget.isEdit) {
-                        model.editTravel(
-                            model.travels.indexOf(widget.travel), travel);
-                      } else {
-                        model.setTravel(travel);
-                      }
 
+                      addToFirebase(model);
                       Navigator.pop(context);
                     },
                     child: Text(
@@ -166,6 +163,26 @@ class _AddPageState extends State<AddPage> {
         ),
       ),
     );
+  }
+
+  addToFirebase(MyModel model){
+
+    Travel travel = Travel(
+        title: titleController.text,
+        startDate: startDate,
+        endDate: endDate,
+        description: descriptionController.text);
+    if (widget.isEdit) {
+      model.editTravel(
+          model.travels.indexOf(widget.travel), travel);
+    } else {
+      String travelId = FirebaseDB.instance.getReference().push().key;
+      travel.id = travelId;
+      FirebaseDB.instance.addTrip(travel).then((value){
+        model.setTravel(travel);
+      });
+    }
+
   }
 
   String _formatDate(DateTime time, DateFormat format) {
