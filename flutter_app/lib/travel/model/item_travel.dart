@@ -1,6 +1,7 @@
 
 
-class ItemTravel {
+class Place {
+  String id;
   String title;
   int time;
   String image;
@@ -8,6 +9,6 @@ class ItemTravel {
   double lat;
   double lng;
 
-  ItemTravel(
-      {this.title, this.time, this.image, this.location, this.lat, this.lng});
+  Place(
+      {this.id,this.title, this.time, this.image, this.location, this.lat, this.lng});
 }

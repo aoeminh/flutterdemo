@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/travel/firebase/authetication.dart';
+import 'package:flutter_app/travel/firebase/firebasedb.dart';
 import 'file:///E:/MinhGVN/FlutterProject/flutter_app/lib/travel/screen/map.dart';
 import 'package:flutter_app/travel/model/item_travel.dart';
 import 'package:flutter_app/travel/model/travel.dart';
@@ -9,6 +12,7 @@ import 'package:flutter_app/travel/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
+import 'package:path/path.dart' as path;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AddItemTravel extends StatefulWidget {
@@ -36,6 +40,7 @@ class _AddItemTravelState extends State<AddItemTravel> {
   File image;
   bool isShowLoading;
   LatLng latLng;
+  String uidFirebase;
 
   @override
   void initState() {
@@ -49,6 +54,9 @@ class _AddItemTravelState extends State<AddItemTravel> {
     selectedDate = DateTime.fromMillisecondsSinceEpoch(widget.travel.startDate);
 
     startDate = DateTime.fromMillisecondsSinceEpoch(widget.travel.startDate);
+    Authentication.instance.firebaseAuth().currentUser().then((value) {
+      uidFirebase = value.uid;
+    });
   }
 
   @override
@@ -358,19 +366,8 @@ class _AddItemTravelState extends State<AddItemTravel> {
               color: Colors.blue,
               onPressed: () {
                 if (validate(context)) {
-                  model.addItemTravel(
-                      startDate,
-                      ItemTravel(
-                          title: titleController.text,
-                          image: image.path,
-                          time: startDate
-                              .add(Duration(
-                                  hours: time.hour, minutes: time.minute))
-                              .millisecondsSinceEpoch,
-                          lat: latLng.latitude,
-                          lng: latLng.longitude,
-                          location: address));
-                  Navigator.pop(context);
+                  print('sssss');
+                  addPlace(model);
                 }
               },
               child: Text(
@@ -393,6 +390,44 @@ class _AddItemTravelState extends State<AddItemTravel> {
       return false;
     }
     return true;
+  }
+
+  addPlace(Travel model)  {
+    print('addPlace');
+    uploadImage().then((StorageTaskSnapshot value) async {
+      print('upload finish');
+      String url = (await value.ref.getDownloadURL()).toString();
+      String placeId = FirebaseDB.instance.getReference().push().key;
+      Place place = Place(
+          id: placeId,
+          title: titleController.text,
+          image: url,
+          time: startDate
+              .add(Duration(hours: time.hour, minutes: time.minute))
+              .millisecondsSinceEpoch,
+          lat: latLng.latitude,
+          lng: latLng.longitude,
+          location: address);
+      FirebaseDB.instance.addPlace(place, uidFirebase, model.id).then((value) {
+        model.addItemTravel(startDate, place);
+        Navigator.pop(context);
+      }).catchError((onError) {
+        Utils.showDialogNotify(
+            context: context, content: onError.toString(), callback: () {});
+      });
+    }).catchError((onError) {
+      Utils.showDialogNotify(
+          context: context, content: onError.toString(), callback: () {});
+    });
+  }
+
+  Future<StorageTaskSnapshot> uploadImage() {
+    print('start upload ${image.path.split('/').last}');
+    StorageReference reference = FirebaseStorage.instance
+        .ref()
+        .child('image${path.basename(image.path.split('/').last)}');
+    StorageUploadTask uploadTask = reference.putFile(image);
+    return uploadTask.onComplete;
   }
 
   _showLoading() {

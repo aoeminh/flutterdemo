@@ -1,6 +1,9 @@
 import 'dart:math';
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/travel/firebase/authetication.dart';
+import 'package:flutter_app/travel/firebase/firebasedb.dart';
 import 'package:flutter_app/travel/model/my_model.dart';
 import 'package:flutter_app/travel/model/travel.dart';
 import 'package:flutter_app/travel/utils.dart';
@@ -37,8 +40,24 @@ class TravelHome extends StatefulWidget {
 }
 
 class _TravelHomeState extends State<TravelHome> {
+
+  @override
+  void initState() {
+    super.initState();
+    print('ssssssss');
+    Authentication.instance.firebaseAuth().currentUser().then((value){
+      FirebaseDB.instance.getListTravel(value.uid).then((DataSnapshot value) {
+
+        print('${value.value}');
+        Map<String,Travel> map = value.value;
+        map.map((item) => Travel.fromJson(item)).
+      });
+    });
+
+  }
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         leading: Icon(Icons.menu),

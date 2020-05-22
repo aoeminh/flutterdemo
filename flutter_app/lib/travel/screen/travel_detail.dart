@@ -6,7 +6,7 @@ import 'package:flutter_app/travel/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
-import 'add_item_travel.dart';
+import 'add_place.dart';
 
 class TravelDetail extends StatefulWidget {
   final Travel travel;
@@ -114,7 +114,7 @@ class _TravelDetailState extends State<TravelDetail> {
         ),
       );
 
-  _buildItem(ItemTravel travel) => Container(
+  _buildItem(Place travel) => Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[

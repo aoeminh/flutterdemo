@@ -178,8 +178,10 @@ class _AddPageState extends State<AddPage> {
     } else {
       String travelId = FirebaseDB.instance.getReference().push().key;
       travel.id = travelId;
-      FirebaseDB.instance.addTrip(travel).then((value){
+      FirebaseDB.instance.addTrip(travel,uidFirebase).then((value){
         model.setTravel(travel);
+      }).catchError((onError){
+
       });
     }
 

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -151,14 +152,13 @@ class _SignInState extends State<SignIn> {
     if (key.currentState.validate()) {
       _showLoading();
       isClick = false;
-      Authentication.instance.signIn(username, password).then((value) {
+      Authentication.instance
+          .signIn(username, password)
+          .then((FirebaseUser value) {
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> TravelHome()),(r)=>false);
-      }).catchError(( PlatformException error) {
+      }).catchError((error) {
         Utils.showDialogNotify(
-          context: context,
-          content: error.toString(),
-          callback: (){}
-        );
+            context: context, content: error.toString(), callback: () {});
       }).whenComplete(() {
         _hideLoading();
         isClick = true;
