@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import 'file:///E:/MinhGVN/FlutterProject/flutter_app/lib/travel/screen/add_page.dart';
 
 import 'sign_in_page.dart';
+import 'splash_page.dart';
 import 'travel_detail.dart';
 
 class TravelPage extends StatelessWidget {
@@ -28,36 +29,43 @@ class TravelPage extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        home: SignIn(),
+        color: Colors.blue,
+        home: SplashPage(),
       ),
     );
   }
 }
 
 class TravelHome extends StatefulWidget {
+  final String uid;
+  const TravelHome({Key key, this.uid}) : super(key: key);
+
   @override
   _TravelHomeState createState() => _TravelHomeState();
 }
 
 class _TravelHomeState extends State<TravelHome> {
-
+  List<Travel> _listTravel = [];
+  bool _isLoading;
   @override
   void initState() {
     super.initState();
-    print('ssssssss');
-    Authentication.instance.firebaseAuth().currentUser().then((value){
-      FirebaseDB.instance.getListTravel(value.uid).then((DataSnapshot value) {
-
-        print('${value.value}');
-        Map<String,Travel> map = value.value;
-        map.map((item) => Travel.fromJson(item)).
+    _isLoading = true;
+      FirebaseDB.instance.getListTravel(widget.uid).then((DataSnapshot value) {
+        Map<dynamic, dynamic> map = value.value;
+        map.forEach((key, value) {
+          _listTravel.add(Travel.fromJson(value));
+        });
+        Provider.of<MyModel>(context).addListTravel(_listTravel);
+        setState(() {
+          _isLoading = false;
+        });
       });
-    });
 
   }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         leading: Icon(Icons.menu),
@@ -81,18 +89,33 @@ class _TravelHomeState extends State<TravelHome> {
   }
 
   _buildBody() => Container(
-        child: Column(
+        child: Stack(
           children: <Widget>[
-            Expanded(
-              child: Consumer<MyModel>(
-                  builder: (context, model, child) => Container(
+            Column(
+              children: <Widget>[
+                Expanded(
+                  child: Consumer<MyModel>(
+                      builder: (context, model, child) => Container(
                         child: ListView.builder(
                             itemCount: model.travels.length,
                             scrollDirection: Axis.vertical,
                             itemBuilder: (context, index) => Center(
                                 child: _buildItem(model.travels[index]))),
                       )),
+                ),
+              ],
             ),
+            Offstage(
+              offstage: !_isLoading,
+              child: Container(
+                child: Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                  ),
+                ),
+              ),
+
+            )
           ],
         ),
       );

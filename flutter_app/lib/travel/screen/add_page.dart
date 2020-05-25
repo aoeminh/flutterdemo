@@ -17,7 +17,8 @@ class AddPage extends StatefulWidget {
 }
 
 class _AddPageState extends State<AddPage> {
-  DateTime selectedDate = DateTime.now().add(Duration(hours: 0,seconds: 0,milliseconds: 0,minutes: 0));
+  DateTime selectedDate = DateTime.now()
+      .add(Duration(hours: 0, seconds: 0, milliseconds: 0, minutes: 0));
   String title;
   int startDate;
   int endDate;
@@ -45,10 +46,9 @@ class _AddPageState extends State<AddPage> {
     } else {
       descriptionController.text = '';
     }
-     Authentication.instance.firebaseAuth().currentUser().then((value) {
+    Authentication.instance.firebaseAuth().currentUser().then((value) {
       uidFirebase = value.uid;
     });
-
   }
 
   @override
@@ -56,9 +56,10 @@ class _AddPageState extends State<AddPage> {
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
-            onTap: (){
+            onTap: () {
               Navigator.pop(context);
-            },child: Icon(Icons.arrow_back)),
+            },
+            child: Icon(Icons.arrow_back)),
         title: Text('Add trip'),
       ),
       body: SingleChildScrollView(
@@ -88,7 +89,6 @@ class _AddPageState extends State<AddPage> {
                     child: InkWell(
                       onTap: () => _selectDate((DateTime datetime) {
                         startDate = datetime.millisecondsSinceEpoch;
-                        print('$startDate');
                         startDateController.text =
                             _formatDate(datetime, DateFormat('dd/MM/yyyy'));
                       }, context),
@@ -143,14 +143,15 @@ class _AddPageState extends State<AddPage> {
                 builder: (context, model, child) => Center(
                   child: FlatButton(
                     color: Colors.blue,
-                    onPressed: () {
-                      if (!_validate(context)) {
-                        return;
-                      }
-
-                      addToFirebase(model);
-                      Navigator.pop(context);
-                    },
+                    onPressed: !widget.isEdit
+                        ? () {
+                      print('add');
+//                            addTravel(model);
+                          }
+                        : () {
+                      print('edit');
+                            editTravel(model);
+                          },
                     child: Text(
                       widget.isEdit ? 'EDIT' : 'ADD',
                       style: TextStyle(color: Colors.white),
@@ -165,26 +166,40 @@ class _AddPageState extends State<AddPage> {
     );
   }
 
-  addToFirebase(MyModel model){
+  addTravel(MyModel model) {
+    if (!_validate(context)) {
+      return;
+    }
 
+    addToFirebase(model);
+  }
+
+  editTravel(MyModel model) {
+    print('editTravel');
+    widget.travel.title = titleController.text;
+    widget.travel.startDate = startDate;
+    widget.travel.endDate = endDate;
+    widget.travel.description = descriptionController.text;
+
+    FirebaseDB.instance.addTrip(widget.travel, uidFirebase).then((value) {
+      model.editTravel(model.travels.indexOf(widget.travel), widget.travel);
+      Navigator.pop(context);
+    });
+  }
+
+  addToFirebase(MyModel model) {
     Travel travel = Travel(
         title: titleController.text,
         startDate: startDate,
         endDate: endDate,
         description: descriptionController.text);
-    if (widget.isEdit) {
-      model.editTravel(
-          model.travels.indexOf(widget.travel), travel);
-    } else {
-      String travelId = FirebaseDB.instance.getReference().push().key;
-      travel.id = travelId;
-      FirebaseDB.instance.addTrip(travel,uidFirebase).then((value){
-        model.setTravel(travel);
-      }).catchError((onError){
 
-      });
-    }
-
+    String travelId = FirebaseDB.instance.getReference().push().key;
+    travel.id = travelId;
+    FirebaseDB.instance.addTrip(travel, uidFirebase).then((value) {
+      model.setTravel(travel);
+      Navigator.pop(context);
+    }).catchError((onError) {});
   }
 
   String _formatDate(DateTime time, DateFormat format) {
@@ -202,7 +217,11 @@ class _AddPageState extends State<AddPage> {
     print('$picked');
     if (picked != null)
       setState(() {
-        DateTime date = new DateTime(picked.year,picked.month,picked.day,);
+        DateTime date = new DateTime(
+          picked.year,
+          picked.month,
+          picked.day,
+        );
         valueChanged(date);
       });
   }

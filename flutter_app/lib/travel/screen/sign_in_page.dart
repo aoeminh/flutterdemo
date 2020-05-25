@@ -59,7 +59,7 @@ class _SignInState extends State<SignIn> {
                   onValidate: (value) {
                     if (value.trim().length < 0) {
                       return 'Email is empty';
-                    } else if (!Utils.isEmail(value)) {
+                    } else if (!Utils.isEmail(value.trim())) {
                       return 'Email invalid';
                     } else {
                       return null;
@@ -155,7 +155,7 @@ class _SignInState extends State<SignIn> {
       Authentication.instance
           .signIn(username, password)
           .then((FirebaseUser value) {
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> TravelHome()),(r)=>false);
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> TravelHome(uid: value.uid),),(r)=>false);
       }).catchError((error) {
         Utils.showDialogNotify(
             context: context, content: error.toString(), callback: () {});

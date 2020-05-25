@@ -392,29 +392,31 @@ class _AddItemTravelState extends State<AddItemTravel> {
     return true;
   }
 
-  addPlace(Travel model)  {
+  addPlace(Travel model) async {
     print('addPlace');
-    uploadImage().then((StorageTaskSnapshot value) async {
+    String url;
+    if (image != null) {
+      StorageTaskSnapshot data = await uploadImage();
       print('upload finish');
-      String url = (await value.ref.getDownloadURL()).toString();
-      String placeId = FirebaseDB.instance.getReference().push().key;
-      Place place = Place(
-          id: placeId,
-          title: titleController.text,
-          image: url,
-          time: startDate
-              .add(Duration(hours: time.hour, minutes: time.minute))
-              .millisecondsSinceEpoch,
-          lat: latLng.latitude,
-          lng: latLng.longitude,
-          location: address);
-      FirebaseDB.instance.addPlace(place, uidFirebase, model.id).then((value) {
-        model.addItemTravel(startDate, place);
-        Navigator.pop(context);
-      }).catchError((onError) {
-        Utils.showDialogNotify(
-            context: context, content: onError.toString(), callback: () {});
-      });
+      String url = (await data.ref.getDownloadURL()).toString();
+    }else{
+      url='';
+    }
+
+    String placeId = FirebaseDB.instance.getReference().push().key;
+    Place place = Place(
+        id: placeId,
+        title: titleController.text,
+        image: url,
+        time: startDate
+            .add(Duration(hours: time.hour, minutes: time.minute))
+            .millisecondsSinceEpoch,
+        lat: latLng.latitude,
+        lng: latLng.longitude,
+        location: address);
+    FirebaseDB.instance.addPlace(place, uidFirebase, model.id).then((value) {
+      model.addItemTravel(startDate, place);
+      Navigator.pop(context);
     }).catchError((onError) {
       Utils.showDialogNotify(
           context: context, content: onError.toString(), callback: () {});

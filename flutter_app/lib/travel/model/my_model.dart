@@ -5,18 +5,23 @@ import 'package:flutter/cupertino.dart';
 import 'travel.dart';
 
 class MyModel extends ChangeNotifier {
-  List<Travel> travels = [];
+  List<Travel> _travels = [];
 
-
+  List<Travel> get travels => _travels;
 
   setTravel(Travel travel) {
-
-    this.travels.add(travel);
+    this._travels.add(travel);
     notifyListeners();
   }
 
-  editTravel(int index, Travel travel){
-    travels[index] = travel;
+  editTravel(int index, Travel travel) {
+    _travels[index] = travel;
     notifyListeners();
   }
+
+  addListTravel(List<Travel> list) {
+    this._travels = list;
+    notifyListeners();
+  }
+
 }

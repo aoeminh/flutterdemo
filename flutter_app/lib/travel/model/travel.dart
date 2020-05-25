@@ -12,7 +12,7 @@ class Travel extends ChangeNotifier {
 
   Travel({this.id, this.title, this.startDate, this.endDate, this.description});
 
-  factory Travel.fromJson(Map<String, dynamic> json) {
+  factory Travel.fromJson(Map<dynamic, dynamic> json) {
     return Travel(
       id: json['id'],
       title: json['title'],
