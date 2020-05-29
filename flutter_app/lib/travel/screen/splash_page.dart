@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/travel/firebase/authetication.dart';
 import 'package:flutter_app/travel/screen/home_page.dart';
@@ -16,6 +17,9 @@ class _SplashPageState extends State<SplashPage> {
     super.initState();
     Authentication.instance.firebaseAuth().currentUser().then((user) {
       if(user !=null){
+        user.getIdToken(refresh: true).then( (IdTokenResult value) {
+          print('${value.token}');
+        });
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => TravelHome(uid: user.uid,)),(r)=>false);
       }else{
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => SignIn()),(r) => false);

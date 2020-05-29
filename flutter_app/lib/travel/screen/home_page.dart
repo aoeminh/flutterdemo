@@ -7,6 +7,7 @@ import 'package:flutter_app/travel/firebase/firebasedb.dart';
 import 'package:flutter_app/travel/model/my_model.dart';
 import 'package:flutter_app/travel/model/travel.dart';
 import 'package:flutter_app/travel/utils.dart';
+import 'package:flutter_app/travel/widget/linear_gradient.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -24,9 +25,6 @@ class TravelPage extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => MyModel(),
         ),
-        ChangeNotifierProvider(
-          create: (context) => Travel(),
-        ),
       ],
       child: MaterialApp(
         color: Colors.blue,
@@ -38,6 +36,7 @@ class TravelPage extends StatelessWidget {
 
 class TravelHome extends StatefulWidget {
   final String uid;
+
   const TravelHome({Key key, this.uid}) : super(key: key);
 
   @override
@@ -47,21 +46,21 @@ class TravelHome extends StatefulWidget {
 class _TravelHomeState extends State<TravelHome> {
   List<Travel> _listTravel = [];
   bool _isLoading;
+
   @override
   void initState() {
     super.initState();
     _isLoading = true;
-      FirebaseDB.instance.getListTravel(widget.uid).then((DataSnapshot value) {
-        Map<dynamic, dynamic> map = value.value;
-        map.forEach((key, value) {
-          _listTravel.add(Travel.fromJson(value));
-        });
-        Provider.of<MyModel>(context).addListTravel(_listTravel);
-        setState(() {
-          _isLoading = false;
-        });
+    FirebaseDB.instance.getListTravel(widget.uid).then((DataSnapshot value) {
+      Map<dynamic, dynamic> map = value.value;
+      map.forEach((key, value) {
+        _listTravel.add(Travel.fromJson(value));
       });
-
+      Provider.of<MyModel>(context).addListTravel(_listTravel);
+      setState(() {
+        _isLoading = false;
+      });
+    });
   }
 
   @override
@@ -89,6 +88,7 @@ class _TravelHomeState extends State<TravelHome> {
   }
 
   _buildBody() => Container(
+    margin: EdgeInsets.all(10),
         child: Stack(
           children: <Widget>[
             Column(
@@ -96,12 +96,13 @@ class _TravelHomeState extends State<TravelHome> {
                 Expanded(
                   child: Consumer<MyModel>(
                       builder: (context, model, child) => Container(
-                        child: ListView.builder(
-                            itemCount: model.travels.length,
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (context, index) => Center(
-                                child: _buildItem(model.travels[index]))),
-                      )),
+                            child: ListView.builder(
+                                itemCount: model.travels.length,
+                                scrollDirection: Axis.vertical,
+                                addAutomaticKeepAlives: true,
+                                itemBuilder: (context, index) => Center(
+                                    child: _buildItem(model.travels[index]))),
+                          )),
                 ),
               ],
             ),
@@ -114,19 +115,31 @@ class _TravelHomeState extends State<TravelHome> {
                   ),
                 ),
               ),
-
             )
           ],
         ),
       );
 
-  _buildItem(Travel travel) => Card(
-        color: Colors.blue,
+  _buildItem(Travel travel) {
+    print('color ${travel.primaryColor}');
+    return Container(
+    margin: EdgeInsets.only(top: 20),
+        decoration: BoxDecoration(
+            gradient: ColorUtils.linear([
+          travel.primaryColor != null
+              ? ColorUtils.stringToColor(travel.primaryColor)
+              : Colors.blue,
+          travel.primaryColor != null
+              ? ColorUtils.stringToColor(travel.accentColor)
+              : Colors.greenAccent
+        ]),
+        borderRadius: BorderRadius.all(Radius.circular(20))),
         child: InkWell(
           onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => TravelDetail(
+                        uid: widget.uid,
                         travel: travel,
                       ))),
           child: Container(
@@ -188,6 +201,7 @@ class _TravelHomeState extends State<TravelHome> {
           ),
         ),
       );
+  }
 
   String _formatDate(int time) {
     return '${Utils.formatDate(DateTime.fromMillisecondsSinceEpoch(time), DateFormat('dd MMM'))}';

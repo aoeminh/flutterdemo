@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/travel/firebase/authetication.dart';
 import 'package:flutter_app/travel/firebase/firebasedb.dart';
 import 'package:flutter_app/travel/model/my_model.dart';
 import 'package:flutter_app/travel/model/travel.dart';
+import 'package:flutter_app/travel/widget/linear_gradient.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -23,6 +25,7 @@ class _AddPageState extends State<AddPage> {
   int startDate;
   int endDate;
   String uidFirebase;
+  int currentColorIndex;
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
   TextEditingController titleController = TextEditingController();
@@ -31,6 +34,7 @@ class _AddPageState extends State<AddPage> {
   @override
   void initState() {
     super.initState();
+    currentColorIndex = 0;
     if (widget.travel != null) {
       titleController.text = widget.travel.title;
       startDateController.text = _formatDate(
@@ -139,18 +143,22 @@ class _AddPageState extends State<AddPage> {
               SizedBox(
                 height: 20,
               ),
-              Consumer<MyModel>(
-                builder: (context, model, child) => Center(
-                  child: FlatButton(
+              _buildColors(),
+              SizedBox(
+                height: 20,
+              ),
+              Center(
+                child: Builder(
+                  builder: (context) => FlatButton(
                     color: Colors.blue,
                     onPressed: !widget.isEdit
                         ? () {
-                      print('add');
-//                            addTravel(model);
+                            print('add');
+                            addTravel(context);
                           }
                         : () {
-                      print('edit');
-                            editTravel(model);
+                            print('edit');
+                            editTravel();
                           },
                     child: Text(
                       widget.isEdit ? 'EDIT' : 'ADD',
@@ -166,38 +174,88 @@ class _AddPageState extends State<AddPage> {
     );
   }
 
-  addTravel(MyModel model) {
+  _buildColors() => Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [...ColorUtils.listColorGradient.map((e) => _itemColor(e))]);
+
+//
+  _buildListColor() => ListView.builder(
+      itemCount: ColorUtils.listColorGradient.length,
+      scrollDirection: Axis.horizontal,
+      itemBuilder: (context, index) {
+        return _itemColor(ColorUtils.listColorGradient[index]);
+      });
+
+  Widget _itemColor(Gradient gradient) {
+    int indexColor = ColorUtils.listColorGradient.indexOf(gradient);
+    return InkWell(
+      onTap: () {
+        setState(() {
+          currentColorIndex = ColorUtils.listColorGradient.indexOf(gradient);
+        });
+        print('$currentColorIndex');
+      },
+      child: Stack(
+        children: <Widget>[
+          Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+                gradient: gradient,
+                borderRadius: BorderRadius.all(Radius.circular(50))),
+          ),
+          Positioned.fill(
+            child: Offstage(
+              offstage: currentColorIndex != indexColor,
+              child: Icon(
+                Icons.check,
+                color: Colors.white,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  addTravel(BuildContext context) {
     if (!_validate(context)) {
       return;
     }
-
-    addToFirebase(model);
+    addToFirebase();
   }
 
-  editTravel(MyModel model) {
+  editTravel() {
     print('editTravel');
     widget.travel.title = titleController.text;
     widget.travel.startDate = startDate;
     widget.travel.endDate = endDate;
     widget.travel.description = descriptionController.text;
+    widget.travel.primaryColor = ItemColor.listItemColor[currentColorIndex].primaryColor;
+    widget.travel.accentColor =  ItemColor.listItemColor[currentColorIndex].accentColor;
 
     FirebaseDB.instance.addTrip(widget.travel, uidFirebase).then((value) {
-      model.editTravel(model.travels.indexOf(widget.travel), widget.travel);
+      Provider.of<MyModel>(context).editTravel(
+          Provider.of<MyModel>(context).travels.indexOf(widget.travel),
+          widget.travel);
       Navigator.pop(context);
     });
   }
 
-  addToFirebase(MyModel model) {
+  addToFirebase() {
     Travel travel = Travel(
         title: titleController.text,
         startDate: startDate,
         endDate: endDate,
-        description: descriptionController.text);
+        description: descriptionController.text,
+        primaryColor: ItemColor.listItemColor[currentColorIndex].primaryColor,
+        accentColor: ItemColor.listItemColor[currentColorIndex].accentColor
+    );
 
     String travelId = FirebaseDB.instance.getReference().push().key;
     travel.id = travelId;
     FirebaseDB.instance.addTrip(travel, uidFirebase).then((value) {
-      model.setTravel(travel);
+      Provider.of<MyModel>(context).setTravel(travel);
       Navigator.pop(context);
     }).catchError((onError) {});
   }

@@ -12,10 +12,13 @@ const String key_travel_title = 'title';
 const String key_travel_start_date = 'start_date';
 const String key_travel_end_date = 'end_date';
 const String key_travel_description = 'description';
+const String key_travel_primaryColor = 'primaryColor';
+const String key_travel_accentColor = 'accentColor';
 const String key_places = 'places';
 const String key_place_id = 'place_id';
 const String key_place_title = 'place_title';
 const String key_place_time = 'place_time';
+const String key_place_start_time = 'place_start_time';
 const String key_place_image = 'place_image';
 const String key_place_location = 'place_location';
 const String key_place_lat = 'place_lat';
@@ -46,14 +49,17 @@ class FirebaseDB {
       key_travel_start_date: travel.startDate,
       key_travel_end_date: travel.endDate,
       key_travel_description: travel.description,
+      key_travel_primaryColor: travel.primaryColor,
+      key_travel_accentColor: travel.accentColor,
     });
   }
 
   Future addPlace(Place place,String uid,String travelId) async {
-    return await getReference().child(key_users).child(uid).child(key_travels).child(travelId).child(place.id).set({
-      key_travel_id: place.id,
+    return await getReference().child(key_users).child(uid).child(key_travels).child(travelId).child(key_places).child(place.id).set({
+      key_place_id: place.id,
       key_place_title: place.title,
       key_place_time: place.time,
+      key_place_start_time: place.startTime,
       key_place_image: place.image,
       key_place_location: place.location,
       key_place_lat: place.lat,
@@ -63,8 +69,11 @@ class FirebaseDB {
 
   Future<DataSnapshot> getListTravel(String uid) async{
     final dbRef = await FirebaseDatabase.instance.reference().child(key_users).child(uid).child(key_travels).once();
-
     return dbRef;
+  }
 
+  Future<DataSnapshot> getListPlaces(String uid,String travelId) async{
+    final dbRef = await FirebaseDatabase.instance.reference().child(key_users).child(uid).child(key_travels).child(travelId).child(key_places).once();
+    return dbRef;
   }
 }

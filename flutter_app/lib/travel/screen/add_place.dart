@@ -1,59 +1,64 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/travel/firebase/authetication.dart';
 import 'package:flutter_app/travel/firebase/firebasedb.dart';
-import 'file:///E:/MinhGVN/FlutterProject/flutter_app/lib/travel/screen/map.dart';
 import 'package:flutter_app/travel/model/item_travel.dart';
 import 'package:flutter_app/travel/model/travel.dart';
 import 'package:flutter_app/travel/utils.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
-import 'package:provider/provider.dart';
 import 'package:path/path.dart' as path;
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class AddItemTravel extends StatefulWidget {
+import 'file:///E:/MinhGVN/FlutterProject/flutter_app/lib/travel/screen/map.dart';
+
+class AddPlace extends StatefulWidget {
   final Travel travel;
+  final Place place;
 
-  AddItemTravel(this.travel);
+  AddPlace({this.travel, this.place});
 
   @override
-  _AddItemTravelState createState() => _AddItemTravelState();
+  _AddPlaceState createState() => _AddPlaceState();
 }
 
-class _AddItemTravelState extends State<AddItemTravel> {
+class _AddPlaceState extends State<AddPlace> {
   TextEditingController startDateController = TextEditingController();
   TextEditingController titleController = TextEditingController();
   TextEditingController timeController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  Completer<GoogleMapController> _controller = Completer();
 
   String title;
   DateTime startDate;
   String locationUrl;
   String address;
   TimeOfDay time;
-  DateTime selectedDate;
   File image;
-  bool isShowLoading;
+  bool isShowLoadingMap;
   LatLng latLng;
   String uidFirebase;
+  bool isLoading;
+  bool isClick;
+  bool isEdit;
+  bool isFromEdit; // using display image
+  String imageUrl;
 
   @override
   void initState() {
     super.initState();
-    isShowLoading = false;
+    isEdit = widget.place != null;
+    isFromEdit = widget.place != null;
+    isLoading = false;
+    isClick = true;
+    isShowLoadingMap = false;
     locationUrl = '';
     address = '';
-    startDateController.text = Utils.formatDate(
-        DateTime.fromMillisecondsSinceEpoch(widget.travel.startDate),
-        DateFormat('dd/MM/yyy'));
-    selectedDate = DateTime.fromMillisecondsSinceEpoch(widget.travel.startDate);
-
-    startDate = DateTime.fromMillisecondsSinceEpoch(widget.travel.startDate);
+    imageUrl = '';
+    initValue();
     Authentication.instance.firebaseAuth().currentUser().then((value) {
       uidFirebase = value.uid;
     });
@@ -69,6 +74,35 @@ class _AddItemTravelState extends State<AddItemTravel> {
       ),
       body: _buildBody(),
     );
+  }
+
+  initValue() {
+    if (isEdit) {
+      titleController.text = widget.place.title;
+      startDateController.text = Utils.formatDate(
+          DateTime.fromMillisecondsSinceEpoch(widget.place.startTime),
+          DateFormat('dd/MM/yyy'));
+      startDate = DateTime.fromMillisecondsSinceEpoch(widget.place.startTime);
+      timeController.text = Utils.formatDate(
+          DateTime.fromMillisecondsSinceEpoch(widget.place.time),
+          DateFormat('hh:mm'));
+      time = TimeOfDay.fromDateTime(
+          DateTime.fromMillisecondsSinceEpoch(widget.place.time));
+      imageUrl = widget.place.image;
+      locationUrl = Utils.generateLocationPreviewImage(
+          latitude: widget.place.lat, longitude: widget.place.lng);
+      Utils.getPlaceAddress(widget.place.lat, widget.place.lng).then((value) {
+        setState(() {
+          address = value;
+        });
+      });
+    } else {
+      startDateController.text = Utils.formatDate(
+          DateTime.fromMillisecondsSinceEpoch(widget.travel.startDate),
+          DateFormat('dd/MM/yyy'));
+
+      startDate = DateTime.fromMillisecondsSinceEpoch(widget.travel.startDate);
+    }
   }
 
   _buildBody() => SingleChildScrollView(
@@ -148,6 +182,20 @@ class _AddItemTravelState extends State<AddItemTravel> {
               SizedBox(
                 height: 20,
               ),
+              Offstage(
+                offstage: !isLoading,
+                child: Container(
+                  color: Colors.white,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
               _addButton(),
             ],
           ),
@@ -157,23 +205,33 @@ class _AddItemTravelState extends State<AddItemTravel> {
   _buildChooseImage() => InkWell(
         onTap: _showBottomSheet,
         child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            border: Border.all(width: 1, color: Colors.black12),
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          height: 250,
-          child: this.image == null
-              ? Icon(
-                  Icons.photo,
-                  size: 50,
-                  color: Colors.grey,
-                )
-              : Image.file(
-                  image,
-                  fit: BoxFit.cover,
-                ),
-        ),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              border: Border.all(width: 1, color: Colors.black12),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            height: 250,
+            child: isFromEdit
+                ? imageUrl != ''
+                    ? CachedNetworkImage(
+                        imageUrl: imageUrl,
+                        fit: BoxFit.cover,
+                      )
+                    : Icon(
+                        Icons.photo,
+                        size: 50,
+                        color: Colors.grey,
+                      )
+                : this.image == null
+                    ? Icon(
+                        Icons.photo,
+                        size: 50,
+                        color: Colors.grey,
+                      )
+                    : Image.file(
+                        image,
+                        fit: BoxFit.cover,
+                      )),
       );
 
   Widget _buildMap() {
@@ -196,7 +254,7 @@ class _AddItemTravelState extends State<AddItemTravel> {
                   ),
                 ),
                 Offstage(
-                  offstage: !isShowLoading,
+                  offstage: !isShowLoadingMap,
                   child: Container(
                     color: Colors.white.withOpacity(0.8),
                     child: Center(
@@ -282,10 +340,10 @@ class _AddItemTravelState extends State<AddItemTravel> {
     hideKeyBoard(context);
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: selectedDate,
+        initialDate: startDate,
         firstDate: DateTime.fromMillisecondsSinceEpoch(widget.travel.startDate),
         lastDate: DateTime.fromMillisecondsSinceEpoch(widget.travel.endDate));
-    if (picked != null && picked != selectedDate)
+    if (picked != null && picked != startDate)
       setState(() {
         valueChanged(picked);
       });
@@ -315,6 +373,7 @@ class _AddItemTravelState extends State<AddItemTravel> {
                         Utils.pickImageFromCamera().then((image) {
                           setState(() {
                             Navigator.pop(context);
+                            isFromEdit = false;
                             this.image = image;
                           });
                         });
@@ -336,6 +395,7 @@ class _AddItemTravelState extends State<AddItemTravel> {
                         Utils.pickImageFromGallery().then((image) {
                           setState(() {
                             Navigator.pop(context);
+                            isFromEdit = false;
                             this.image = image;
                           });
                         });
@@ -360,24 +420,29 @@ class _AddItemTravelState extends State<AddItemTravel> {
 
   _addButton() => Container(
           child: Center(
-        child: Consumer<Travel>(
-          builder: (context, model, child) => InkWell(
-            child: FlatButton(
-              color: Colors.blue,
-              onPressed: () {
-                if (validate(context)) {
-                  print('sssss');
-                  addPlace(model);
-                }
-              },
-              child: Text(
-                'Add',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
+              child: Builder(
+        builder: (context) => FlatButton(
+          color: Colors.blue,
+          onPressed: () {
+            if (validate(context)) {
+              setState(() {
+                isLoading = true;
+                isClick = false;
+              });
+              isEdit ? editPlace() : addPlace();
+            }
+          },
+          child: isEdit
+              ? Text(
+                  'Edit',
+                  style: TextStyle(color: Colors.white),
+                )
+              : Text(
+                  'Add',
+                  style: TextStyle(color: Colors.white),
+                ),
         ),
-      ));
+      )));
 
   bool validate(BuildContext context) {
     if (titleController.text.trim().isEmpty) {
@@ -392,17 +457,8 @@ class _AddItemTravelState extends State<AddItemTravel> {
     return true;
   }
 
-  addPlace(Travel model) async {
-    print('addPlace');
-    String url;
-    if (image != null) {
-      StorageTaskSnapshot data = await uploadImage();
-      print('upload finish');
-      String url = (await data.ref.getDownloadURL()).toString();
-    }else{
-      url='';
-    }
-
+  addPlace() async {
+    String url = await uploadImage();
     String placeId = FirebaseDB.instance.getReference().push().key;
     Place place = Place(
         id: placeId,
@@ -411,36 +467,81 @@ class _AddItemTravelState extends State<AddItemTravel> {
         time: startDate
             .add(Duration(hours: time.hour, minutes: time.minute))
             .millisecondsSinceEpoch,
-        lat: latLng.latitude,
-        lng: latLng.longitude,
+        startTime: startDate.millisecondsSinceEpoch,
+        lat: latLng != null ? latLng.latitude : null,
+        lng: latLng != null ? latLng.longitude : null,
         location: address);
-    FirebaseDB.instance.addPlace(place, uidFirebase, model.id).then((value) {
-      model.addItemTravel(startDate, place);
+    addToFirebase(place: place);
+  }
+
+  addToFirebase({Place place, int index, DateTime newKey, DateTime oldKey}) {
+    FirebaseDB.instance
+        .addPlace(place, uidFirebase, widget.travel.id)
+        .then((value) {
+      if (isEdit) {
+        widget.travel.editPlace(
+            newKey: newKey, oldKey: oldKey, place: place, index: index);
+      } else {
+        widget.travel.addPlace(startDate, place);
+      }
       Navigator.pop(context);
     }).catchError((onError) {
+      print('$onError');
       Utils.showDialogNotify(
           context: context, content: onError.toString(), callback: () {});
+    }).whenComplete(() {
+      isClick = true;
+      isLoading = false;
     });
   }
 
-  Future<StorageTaskSnapshot> uploadImage() {
-    print('start upload ${image.path.split('/').last}');
-    StorageReference reference = FirebaseStorage.instance
-        .ref()
-        .child('image${path.basename(image.path.split('/').last)}');
-    StorageUploadTask uploadTask = reference.putFile(image);
-    return uploadTask.onComplete;
+  editPlace() async {
+    String url = await uploadImage();
+    DateTime oldKey =
+        DateTime.fromMillisecondsSinceEpoch(widget.place.startTime);
+    widget.place.image = url;
+    widget.place.title = titleController.text;
+    widget.place.time = startDate
+        .add(Duration(hours: time.hour, minutes: time.minute))
+        .millisecondsSinceEpoch;
+    widget.place.startTime = startDate.millisecondsSinceEpoch;
+    widget.place.lat = latLng != null ? latLng.latitude : null;
+    widget.place.lng = latLng != null ? latLng.longitude : null;
+    widget.place.location = address;
+
+    addToFirebase(
+        place: widget.place,
+        newKey: startDate,
+        oldKey: oldKey,
+        index: widget.travel.item[oldKey].indexOf(widget.place));
+  }
+
+  Future<String> uploadImage() async {
+    String url;
+    if (image != null) {
+      print('start upload ${image.path.split('/').last}');
+      StorageReference reference = FirebaseStorage.instance
+          .ref()
+          .child('image${path.basename(image.path.split('/').last)}');
+      StorageUploadTask uploadTask = reference.putFile(image);
+      StorageTaskSnapshot data = await uploadTask.onComplete;
+      var value = await data.ref.getDownloadURL();
+      url = value.toString();
+    } else {
+      url = '';
+    }
+    return url;
   }
 
   _showLoading() {
     setState(() {
-      isShowLoading = true;
+      isShowLoadingMap = true;
     });
   }
 
   _hideLoading() {
     setState(() {
-      isShowLoading = false;
+      isShowLoadingMap = false;
     });
   }
 
