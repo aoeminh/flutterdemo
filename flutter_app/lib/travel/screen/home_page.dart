@@ -156,10 +156,13 @@ class _TravelHomeState extends State<TravelHome> {
                       flex: 1,
                       child: Text(
                         '${travel.title}',
+                        maxLines: 2,
+                        overflow: TextOverflow.clip,
                         style: TextStyle(
                             fontSize: 30,
                             color: Colors.white,
-                            fontWeight: FontWeight.bold),
+                            fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     IconButton(

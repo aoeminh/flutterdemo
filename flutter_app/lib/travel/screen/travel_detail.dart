@@ -6,6 +6,7 @@ import 'package:flutter_app/travel/firebase/firebasedb.dart';
 import 'package:flutter_app/travel/model/item_travel.dart';
 import 'package:flutter_app/travel/model/travel.dart';
 import 'package:flutter_app/travel/utils.dart';
+import 'package:flutter_app/travel/widget/linear_gradient.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -54,29 +55,97 @@ class _TravelDetailState extends State<TravelDetail> {
     return ChangeNotifierProvider.value(
       value: widget.travel,
       child: Consumer<Travel>(
-        builder: (context, travel, child) => Scaffold(
-          appBar: AppBar(
-            leading: InkWell(
-              onTap: () => Navigator.pop(context),
-              child: Icon(Icons.arrow_back),
-            ),
-            title: Text('${widget.travel.title}'),
-            actions: <Widget>[
-              Container(
-                  margin: EdgeInsets.only(right: 10),
-                  child: InkWell(
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AddPlace(travel: widget.travel,))),
-                      child: Icon(Icons.add)))
-            ],
-          ),
-          body: _buildBody(travel),
-        ),
-      ),
+          builder: (context, travel, child) => Scaffold(
+                body: Container(
+                  decoration: BoxDecoration(
+                    gradient: ColorUtils.linear([ColorUtils.stringToColor(travel.accentColor),ColorUtils.stringToColor(travel.primaryColor)])
+                  ),
+                  child: CustomScrollView(
+                    slivers: <Widget>[
+                      SliverAppBar(
+                        leading: InkWell(
+                          onTap: () => Navigator.pop(context),
+                          child: Icon(Icons.arrow_back_ios),
+                        ),
+                        backgroundColor:
+                        ColorUtils.stringToColor(travel.primaryColor),
+                        actions: <Widget>[
+                          Container(
+                              margin: EdgeInsets.only(right: 15),
+                              child: InkWell(
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => AddPlace(
+                                                travel: widget.travel,
+                                              ))),
+                                  child: Icon(Icons.add))),
+                        ],
+                        expandedHeight: 200,
+                        pinned: true,
+                        floating: true,
+                        centerTitle: true,
+                        flexibleSpace: FlexibleSpaceBar(
+                          centerTitle: true,
+                          title: Container(
+                              child: Text('${travel.title}')),
+                        ),
+                      ),
+                      SliverList(
+                        delegate: travel.item != null
+                            ? SliverChildBuilderDelegate((context, index) {
+                                List<DateTime> iterable;
+                                if (travel.item != null) {
+                                  iterable = travel.item.keys.toList();
+                                  iterable.sort(
+                                      (item1, item2) => item1.compareTo(item2));
+                                }
+                                print('sss${iterable.length}');
+                                travel.item[iterable[index]].sort(
+                                    (item1, item2) =>
+                                        item1.time.compareTo(item2.time));
+                                return Column(
+                                  children: <Widget>[
+                                    _buildHeader(Utils.formatDate(
+                                        iterable[index], DateFormat('dd MMM'))),
+                                    Column(
+                                      children: <Widget>[
+                                        ...travel.item[iterable[index]]
+                                            .map((e) => _buildItem(e))
+                                      ],
+                                    )
+                                  ],
+                                );
+                              }, childCount: travel.item.length)
+                            : SliverChildBuilderDelegate(
+                                (context, index) => Container(),
+                                childCount: 0),
+                      )
+                    ],
+                  ),
+                ),
+              )),
     );
   }
+
+//
+//  appBar: AppBar(
+//  leading: InkWell(
+//  onTap: () => Navigator.pop(context),
+//  child: Icon(Icons.arrow_back_ios),
+//  ),
+//  title: Center(child: Text('${widget.travel.title}')),
+//  actions: <Widget>[
+//  Container(
+//  margin: EdgeInsets.only(right: 15),
+//  child: InkWell(
+//  onTap: () => Navigator.push(
+//  context,
+//  MaterialPageRoute(
+//  builder: (context) => AddPlace(travel: widget.travel,))),
+//  child: Icon(Icons.add)))
+//  ],
+//  ),
 
   _buildBody(Travel model) {
     List<DateTime> iterable;
@@ -175,7 +244,8 @@ class _TravelDetailState extends State<TravelDetail> {
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
-                  color: Colors.blue),
+                border: Border.all(color: Colors.white,width: 2)
+                 ),
               margin: EdgeInsets.only(left: 10, right: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,19 +273,31 @@ class _TravelDetailState extends State<TravelDetail> {
                         child: Text(place.title,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,)),
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            )),
                       ),
                       Expanded(
                           flex: 1,
                           child: InkWell(
-                              onTap: () =>Navigator.push(context, MaterialPageRoute(builder: (context) => AddPlace(travel: widget.travel,place:place ,),)),
-                              child: Icon(Icons.settings,color: Colors.white,)))
+                              onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => AddPlace(
+                                      travel: widget.travel,
+                                      place: place,
+                                    ),
+                                  )),
+                              child: Icon(
+                                Icons.settings,
+                                color: Colors.white,
+                              )))
                     ],
                   ),
-                  SizedBox(height: 20,),
-
+                  SizedBox(
+                    height: 20,
+                  ),
                   place.location != null
                       ? Text('${place.location}',
                           style: TextStyle(
@@ -233,10 +315,12 @@ class _TravelDetailState extends State<TravelDetail> {
                             imageUrl: place.image,
                             height: 300,
                             fit: BoxFit.cover,
-                            placeholder: (context, url) => CircularProgressIndicator(
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(
 //                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                            ),
-                            errorWidget: (context, url, error) => Icon(Icons.error),
+                                    ),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
                           ),
                         ),
                 ],

@@ -233,7 +233,6 @@ class _AddPageState extends State<AddPage> {
     widget.travel.description = descriptionController.text;
     widget.travel.primaryColor = ItemColor.listItemColor[currentColorIndex].primaryColor;
     widget.travel.accentColor =  ItemColor.listItemColor[currentColorIndex].accentColor;
-
     FirebaseDB.instance.addTrip(widget.travel, uidFirebase).then((value) {
       Provider.of<MyModel>(context).editTravel(
           Provider.of<MyModel>(context).travels.indexOf(widget.travel),
