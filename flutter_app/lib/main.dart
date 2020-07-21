@@ -7,6 +7,7 @@ import 'animation/parenting_animation_widget_home.dart';
 import 'bike/bike_home.dart';
 import 'chat/chat.dart';
 import 'clock/clock.dart';
+import 'generated/l10n.dart';
 import 'local_event_app/home/local_app_home.dart';
 import 'netflix/netflix_main.dart';
 

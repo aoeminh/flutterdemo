@@ -3,14 +3,20 @@ import 'package:redux/redux.dart';
 
 class LoadingMiddleware extends MiddlewareClass<int> {
   @override
-  void call(Store<int> store, action, next) async {
+  Future<void> call(Store<int> store, action, next) async {
     print('LoadingMiddleware - $action ');
+    int oldState = store.state;
     if(action is LoadingAction){
-      await (Future.delayed(Duration(seconds: 2)));
       action.callback(true);
-      var newState = store.state + 10;
-      store.dispatch(UpdateAction(state: newState));
+      await (Future.delayed(Duration(seconds: 2)));
+
+      print(' ssold $oldState');
+      int newState = oldState + 10;
+      print(' new $newState');
+
+      store.dispatch(UpdateAction(count: newState));
       action.callback(false);
+      return;
     }
     next(action);
   }

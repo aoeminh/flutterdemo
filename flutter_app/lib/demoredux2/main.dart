@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/demoredux2/actions.dart';
 import 'package:flutter_app/demoredux2/change_value_screen.dart';
 import 'package:flutter_app/demoredux2/reducer.dart';
+import 'package:flutter_app/generated/l10n.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:intl/intl.dart';
 import 'package:redux/redux.dart';
 
 import 'midleware.dart';
@@ -25,6 +28,13 @@ class ReduxApp extends StatelessWidget {
     return StoreProvider<int>(
       store: store,
       child: MaterialApp(
+        localizationsDelegates: [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
         home: ReduxAppHome(),
       ),
     );
@@ -53,10 +63,10 @@ class _ReduxAppHomeState extends State<ReduxAppHome> {
       appBar: AppBar(
         title: Text('Home'),
       ),
-      body: Center(
-        child: Stack(
-          children: <Widget>[
-            Column(
+      body: Stack(
+        children: <Widget>[
+          Center(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 StoreConnector<int, int>(
@@ -77,36 +87,37 @@ class _ReduxAppHomeState extends State<ReduxAppHome> {
                   height: 50,
                 ),
                 StoreConnector<int, VoidCallback>(
-                  converter: (store) =>(){
+                  converter: (store) => (){
                     store.dispatch(LoadingAction(callback: onStateChange));
                   },
                   builder: (context, callback) {
                     return FlatButton(
                       onPressed: callback,
-                      child: Text('Refress'),
+                      child: Text(S.of(context).hello),
                     );
                   },
                 )
               ],
             ),
-            Offstage(
-              offstage: !isLoading,
-              child: Container(
-                color: Colors.white.withOpacity(0.8),
-                child: Center(
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                  ),
+          ),
+          Offstage(
+            offstage: !isLoading,
+            child: Container(
+              color: Colors.white.withOpacity(0.8),
+              child: Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
                 ),
               ),
-            )
-          ],
-        )
+            ),
+          )
+        ],
       ),
     );
   }
 
    onStateChange(bool isLoading){
+    print('onStateChange $isLoading');
     setState(() {
       this.isLoading = isLoading;
     });

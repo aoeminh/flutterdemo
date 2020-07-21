@@ -9,7 +9,6 @@ import 'package:flutter_app/form/response/login_response.dart';
 import 'package:flutter_app/form/share_preferent.dart';
 import 'package:flutter_app/form/sign_up_page.dart';
 import 'package:flutter_app/form/widget/input_form.dart';
-import 'package:flutter_app/generated/i18n.dart';
 
 final String _endpoint = "http://10.64.100.22:9119";
 

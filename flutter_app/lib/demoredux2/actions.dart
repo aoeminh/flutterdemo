@@ -19,7 +19,7 @@ class LoadingAction {
 }
 
 class UpdateAction {
-  final int state;
+  final count;
 
-  UpdateAction({this.state});
+  UpdateAction({this.count});
 }
