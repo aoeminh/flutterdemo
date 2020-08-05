@@ -57,8 +57,32 @@ class _ReduxAppHomeState extends State<ReduxAppHome> {
     super.initState();
     isLoading =false;
   }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+
+    print('didChangeDependencies');
+  }
+
+  @override
+  void didUpdateWidget(ReduxAppHome oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    print('didUpdateWidget');
+  }
+  @override
+  void deactivate() {
+    // TODO: implement deactivate
+    super.deactivate();
+    print('deactivate1');
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    print('build');
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),

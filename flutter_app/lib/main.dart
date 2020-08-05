@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'chat_socket/chat_page.dart';
 import 'file:///E:/MinhGVN/FlutterProject/flutter_app/lib/travel/screen/home_page.dart';
 import 'package:flutter_app/travel_ui/travel_main.dart';
 

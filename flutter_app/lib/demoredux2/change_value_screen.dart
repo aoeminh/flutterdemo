@@ -44,4 +44,18 @@ class _ChangeValueScreenState extends State<ChangeValueScreen> {
       ),
     );
   }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    print('dispose2');
+  }
+
+  @override
+  void deactivate() {
+    // TODO: implement deactivate
+    super.deactivate();
+    print('deactivate2');
+  }
+
 }
