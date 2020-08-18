@@ -11,7 +11,7 @@ import 'package:flutter_app/travel/widget/linear_gradient.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import 'file:///E:/MinhGVN/FlutterProject/flutter_app/lib/travel/screen/add_page.dart';
+import 'add_page.dart';
 
 import 'sign_in_page.dart';
 import 'splash_page.dart';

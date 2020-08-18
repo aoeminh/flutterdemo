@@ -14,7 +14,8 @@ import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:path/path.dart' as path;
 
-import 'file:///E:/MinhGVN/FlutterProject/flutter_app/lib/travel/screen/map.dart';
+import 'map.dart';
+
 
 class AddPlace extends StatefulWidget {
   final Travel travel;
