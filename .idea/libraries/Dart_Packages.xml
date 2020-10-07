@@ -9,6 +9,13 @@
             </list>
           </value>
         </entry>
+        <entry key="animated_floatactionbuttons">
+          <value>
+            <list>
+              <option value="C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/animated_floatactionbuttons-0.1.0/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="archive">
           <value>
             <list>
@@ -650,6 +657,7 @@
     </properties>
     <CLASSES>
       <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/access_settings_menu-0.0.1/lib" />
+      <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/animated_floatactionbuttons-0.1.0/lib" />
       <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/archive-2.0.11/lib" />
       <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/args-1.5.2/lib" />
       <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.4.0/lib" />

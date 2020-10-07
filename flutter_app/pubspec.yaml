@@ -51,6 +51,7 @@ dependencies:
   flutter_redux_dev_tools: ^0.3.0
   bloc: ^5.0.1
   video_player: ^0.10.11+2
+  animated_floatactionbuttons: ^0.1.0
 
 
 
