@@ -58,11 +58,11 @@ class BottomShapeClipper extends CustomClipper<Path> {
     double yCenter = size.height *0.8 +150  * math.cos(valueY * slice);
     Path path = Path();
     Offset startPoint = Offset(0, size.height * 0.7);
-
+    print('width ${size.width}');
     path.lineTo(startPoint.dx, startPoint.dy);
     path.quadraticBezierTo(
         xCenter,yCenter, size.width, size.height * 0.7);
-    path.lineTo(size.width, 0);
+    path.lineTo(startPoint.dy, size.width);
     return path;
   }
 

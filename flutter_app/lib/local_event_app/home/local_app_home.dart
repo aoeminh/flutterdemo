@@ -11,6 +11,9 @@ import 'package:flutter_app/local_event_app/model/event.dart';
 const double _paddingLarge = 20.0;
 const double _paddingSmall = 15.0;
 
+void main(){
+  runApp(LocalMain());
+}
 class LocalMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
